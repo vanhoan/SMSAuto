@@ -1,6 +1,5 @@
 F:\Learn\C#\SMS\SMSAuto\SMSAuto\bin\Debug\SMSAuto.exe
 F:\Learn\C#\SMS\SMSAuto\SMSAuto\bin\Debug\SMSAuto.pdb
-F:\Learn\C#\SMS\SMSAuto\SMSAuto\obj\Debug\SMSAuto.csprojResolveAssemblyReference.cache
 F:\Learn\C#\SMS\SMSAuto\SMSAuto\obj\Debug\SMSAuto.Form1.resources
 F:\Learn\C#\SMS\SMSAuto\SMSAuto\obj\Debug\SMSAuto.Properties.Resources.resources
 F:\Learn\C#\SMS\SMSAuto\SMSAuto\obj\Debug\SMSAuto.csproj.GenerateResource.Cache

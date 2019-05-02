@@ -31,6 +31,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblTotal = new System.Windows.Forms.Label();
+            this.lblPortSelect = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,6 +60,7 @@
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.Size = new System.Drawing.Size(259, 162);
             this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
             // 
             // Name
             // 
@@ -66,16 +69,37 @@
             this.Name.Name = "Name";
             this.Name.ReadOnly = true;
             // 
+            // lblTotal
+            // 
+            this.lblTotal.AutoSize = true;
+            this.lblTotal.Location = new System.Drawing.Point(13, 182);
+            this.lblTotal.Name = "lblTotal";
+            this.lblTotal.Size = new System.Drawing.Size(35, 13);
+            this.lblTotal.TabIndex = 2;
+            this.lblTotal.Text = "label1";
+            // 
+            // lblPortSelect
+            // 
+            this.lblPortSelect.AutoSize = true;
+            this.lblPortSelect.Location = new System.Drawing.Point(210, 182);
+            this.lblPortSelect.Name = "lblPortSelect";
+            this.lblPortSelect.Size = new System.Drawing.Size(35, 13);
+            this.lblPortSelect.TabIndex = 3;
+            this.lblPortSelect.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.lblPortSelect);
+            this.Controls.Add(this.lblTotal);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button1);
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -84,6 +108,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name;
+        private System.Windows.Forms.Label lblTotal;
+        private System.Windows.Forms.Label lblPortSelect;
     }
 }
 

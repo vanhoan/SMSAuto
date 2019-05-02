@@ -8,6 +8,7 @@ using System.Linq;
 using System.Management;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace SMSAuto
@@ -27,39 +28,26 @@ namespace SMSAuto
         {        
             //show list of valid com ports
             listPort = GetSerialPorts();
+
             SetDataGribView(listPort);
         }
 
         private List<ComPort> GetSerialPorts()
         {
-            using (var searcher = new ManagementObjectSearcher
-                ("SELECT * FROM WIN32_SerialPort"))
+            List<ComPort> listdata = new List<ComPort>();
+            foreach (string item in System.IO.Ports.SerialPort.GetPortNames())
             {
-                var ports = searcher.Get().Cast<ManagementBaseObject>().ToList();
-                return ports.Select(p =>
-                {
-                    ComPort c = new ComPort();
-                    c.name = p.GetPropertyValue("DeviceID").ToString();
-                    c.vid = p.GetPropertyValue("PNPDeviceID").ToString();
-                    c.description = p.GetPropertyValue("Caption").ToString();
-
-                    Match mVID = Regex.Match(c.vid, vidPattern, RegexOptions.IgnoreCase);
-                    Match mPID = Regex.Match(c.vid, pidPattern, RegexOptions.IgnoreCase);
-
-                    if (mVID.Success)
-                        c.vid = mVID.Groups[1].Value;
-                    if (mPID.Success)
-                        c.pid = mPID.Groups[1].Value;
-
-                    return c;
-
-                }).ToList();
+                ComPort c = new ComPort();
+                c.name = item;
+                listdata.Add(c);
             }
+            return listdata;
         }
 
 
         private void SetDataGribView(List<ComPort> listdata)
         {
+            ChangeUI(() => lblTotal.Text = listdata.Count.ToString());
             dataGridView1.Rows.Clear();
             foreach (ComPort str in listdata)
             {
@@ -70,7 +58,7 @@ namespace SMSAuto
         private void AddRowToGridView(ComPort gmail)
         {
             DataGridViewTextBoxCell userCell = new DataGridViewTextBoxCell();
-            userCell.Value = gmail.pid;
+            userCell.Value = gmail.name;
             
 
             DataGridViewRow newRow = new DataGridViewRow();
@@ -94,6 +82,68 @@ namespace SMSAuto
             catch (Exception)
             {
 
+            }
+        }
+
+        private void Call(string nameCom)
+        {
+            try
+            {
+                SerialPort port = new SerialPort();
+                port.PortName = nameCom;
+                port.Parity = Parity.None;
+                port.DataBits = 8;
+                port.StopBits = StopBits.One;
+                port.ReadTimeout = 3000;
+                port.WriteTimeout = 3000;
+                port.DataReceived += port_DataReceived;
+                port.Open();
+                string cmd = "AT+CUSD=1,\"*101#\",15";
+                port.WriteLine(cmd + "\r");
+                Thread.Sleep(500);
+                string ss = port.ReadExisting();
+                if (ss.EndsWith("\r\nOK\r\n"))
+                {
+                    MessageBox.Show("Modem is connected \r Calling : ");
+                }
+                port.Close();
+                port.Dispose();
+            }catch(Exception e){
+                MessageBox.Show("Call : " + e.Message);
+            }
+            
+        }
+
+        void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                string message = "";
+                SerialPort spL = (SerialPort)sender;
+                byte[] buf = new byte[spL.BytesToRead];
+                spL.Read(buf, 0, buf.Length);
+
+                foreach (Byte b in buf)
+                {
+                    message += b.ToString();
+                }
+
+                var result = Encoding.ASCII.GetString(buf);
+                MessageBox.Show(message);
+
+            }catch(Exception e1){
+                MessageBox.Show(e1.Message);
+            }
+            
+        }
+
+        private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                string value = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                ChangeUI(() => lblPortSelect.Text = value);
+                Call(value);
             }
         }
     }
