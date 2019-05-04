@@ -1,83 +1,16 @@
-﻿using System;
+﻿using SMSAuto.Common;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace SMSAuto.Action
 {
     public class ATAction
     {
-        static SerialPort port;
-        public static string Response = "";
-        public void Initialization(string NamePort)
-        {
-            port = new SerialPort(NamePort, 115200);
-            port.Parity = Parity.None;
-            port.DataBits = 8;
-            port.StopBits = StopBits.One;
-            port.ReadTimeout = 3000;
-            port.WriteTimeout = 5000;
-            //port.DataReceived += port_DataReceived;
-        }
-
-        public bool ConnectPort()
-        {
-            try
-            {
-                if (!port.IsOpen)
-                {
-                    port.Open();
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }            
-        }
-
-        public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            try
-            {
-                string message = "";
-                SerialPort spL = (SerialPort)sender;
-                byte[] buf = new byte[spL.BytesToRead];
-                spL.Read(buf, 0, buf.Length);
-
-                foreach (Byte b in buf)
-                {
-                    message += b.ToString();
-                }
-                String v = System.Text.Encoding.UTF8.GetString(buf, 0, buf.Length);
-                var result = Encoding.ASCII.GetString(buf);
-                Response = result;
-            }
-            catch (Exception)
-            {
-               
-            }
-        }
-
-        public string ResponseReslut()
-        {
-            return Response;
-        }
-
-        public string SendCommand(string conmmand)
-        {
-            if (!port.IsOpen)
-            {
-                port.Open();
-            }
-            port.WriteLine(conmmand);
-            Thread.Sleep(5000);
-            string ss = port.ReadExisting();
-            
-            return ss;
-        }
 
         public string CheckBanlce(string port)
         {
@@ -88,29 +21,136 @@ namespace SMSAuto.Action
             serialPort.ReadTimeout = 3000;
             serialPort.WriteTimeout = 5000;
             serialPort.Open();
-            string command = "AT+CUSD=1,\"*101#\",15\r";
+            string command = Constant.COMMAND_BALANCE;
             serialPort.WriteLine(command);
-            Thread.Sleep(5000);
-            string ss = serialPort.ReadExisting();
+            string ss = "";
+            int i = 0;
+            bool isReading = true;
+            while (isReading)
+            {
+                if (i == 5)
+                {
+                    break;
+                }
+                try
+                {
+                    ss += serialPort.ReadExisting();
+                    if (ss.IndexOf("CUSD: 2") >=0 || ss.IndexOf("CUSD: 4") >= 0 || ss.IndexOf("ERROR") >= 0)
+                    {
+                        isReading = false;
+                    } 
+                    else
+                    {
+                        Thread.Sleep(2000);
+                        i++;
+                    }
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(2000);
+                    i++;
+                }
+               
+            }
+            
             serialPort.Close();
             serialPort.Dispose();
             return ss;
         }
 
-        public void Disconnect()
+        public string GetPhoneNumber(string port)
         {
-            try
+            SerialPort serialPort = new SerialPort(port, 115200);
+            serialPort.Parity = Parity.None;
+            serialPort.DataBits = 8;
+            serialPort.StopBits = StopBits.One;
+            serialPort.ReadTimeout = 3000;
+            serialPort.WriteTimeout = 5000;
+            serialPort.Open();
+            string command = Constant.COMMAND_PHONE;
+            serialPort.WriteLine(command);
+            string ss = "";
+            int i = 0;
+            bool isReading = true;
+            while (isReading)
             {
-                if (port.IsOpen)
+                if (i == 5)
                 {
-                    port.Close();
-                    port.Dispose();
+                    break;
                 }
+                try
+                {
+                    ss += serialPort.ReadExisting();
+                    Regex regex = new Regex(@"[0-9]{8,12}");
+                    Match match = regex.Match(ss);
+                    if (match.Success)
+                    {
+                        isReading = false;
+                        ss = match.Value.Replace("855", "0");
+                    }
+                    else
+                    {
+                        Thread.Sleep(2000);
+                        i++;
+                    }  
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(2000);
+                    i++;
+                }  
             }
-            catch (Exception)
+
+            serialPort.Close();
+            serialPort.Dispose();
+            return ss;
+        }
+
+        public string TransferMoney(string port,string phone, double money, string pass)
+        {
+            SerialPort serialPort = new SerialPort(port, 115200);
+            serialPort.Parity = Parity.None;
+            serialPort.DataBits = 8;
+            serialPort.StopBits = StopBits.One;
+            serialPort.ReadTimeout = 3000;
+            serialPort.WriteTimeout = 5000;
+            serialPort.Open();
+            string command = string.Format(Constant.COMMAND_TRANSFER,phone , money, pass);
+            Utils.WriteFileLog(command);
+            serialPort.WriteLine(command);
+            string ss = "";
+            int i = 0;
+            bool isReading = true;
+            while (isReading)
             {
+                if (i == 5)
+                {
+                    break;
+                }
+                try
+                {
+                    ss += serialPort.ReadExisting();
+                    if (ss.IndexOf("CUSD: 2") >= 0 || ss.IndexOf("ERROR") >= 0)
+                    {
+                        isReading = false;
+                    }
+                    else
+                    {
+                        Thread.Sleep(2000);
+                        i++;
+                    }
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(2000);
+                    i++;
+                }
 
             }
+            serialPort.Close();
+            serialPort.Dispose();
+            Utils.WriteFileLog(ss);
+            return ss;
         }
     }
 }

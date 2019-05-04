@@ -10,8 +10,10 @@ namespace SMSAuto.Model
         
         public string Name;
         public string Status;
+        public string Status_Send;
         public string Phone;
-        public string Money;
+        public string Phone_Reveice;
+        public double Money;
         public string Currency;
         public string Description;
 

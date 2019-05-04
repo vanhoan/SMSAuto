@@ -200,6 +200,7 @@ namespace SMSAuto.Common
         }
         public static string GetDescription(string reponse)
         {
+          
             reponse = reponse.Replace("OK","");
             reponse = reponse.Replace("+", "");
             reponse = reponse.Replace("ATCUSD=1,\"*101#\",15\r", "");
@@ -210,11 +211,15 @@ namespace SMSAuto.Common
         }
         public static string GetPhone(string reponse)
         {
-            Regex regex = new Regex(@"[0-9]{5,11}");
+            if (string.IsNullOrEmpty(reponse))
+            {
+                return "";
+            }
+            Regex regex = new Regex(@"[0-9]{8,12}");
             Match match = regex.Match(reponse);
             if (match.Success)
             {
-                return match.Value;
+                return match.Value.Replace("855","0");
             }
             else
             {
@@ -223,42 +228,59 @@ namespace SMSAuto.Common
         }
         public static string GetCurrency(string reponse)
         {
-            if (reponse.IndexOf("VND") >= 0)
-            {
-                return "VND";
-            }
-            Regex regex = new Regex(@"[0-9]+[d]+");
-            Match match = regex.Match(reponse);
-            if (match.Success)
-            {
-                return "VND";
-            }
-            if (reponse.IndexOf("USD") >= 0)
-            {
-                return "USD";
-            }
+            //if (reponse.IndexOf("VND") >= 0)
+            //{
+            //    return "VND";
+            //}
+            //Regex regex = new Regex(@"[0-9]+[d]+");
+            //Match match = regex.Match(reponse);
+            //if (match.Success)
+            //{
+            //    return "VND";
+            //}
+            //if (reponse.IndexOf("USD") >= 0)
+            //{
+            //    return "USD";
+            //}
             
-            return "Other";
+            return "USD";
         }
-        public static string GetMoney(string reponse)
+        public static double GetMoney(string reponse)
         {
-           
-            Regex regex = new Regex(@"[0-9 ]+\bVND\b");
-            Match match = regex.Match(reponse);
-            if (match.Success)
+            try
             {
-                string value = match.Value.Replace("VND", "");
-                return value.Trim();
-            }
-            regex = new Regex(@"[0-9]+[d]");
-            match = regex.Match(reponse);
-            if (match.Success)
-            {
-                string value = match.Value.Replace("d", "");
-                return value.Trim();
-            }
+                if (string.IsNullOrEmpty(reponse))
+                {
+                    return 0;
+                }
+                Regex regex = new Regex(@"[0-9.]+[ ]?[V]+[N]+[D]+");
+                Match match = regex.Match(reponse);
+                if (match.Success)
+                {
+                    string value = match.Value.Replace("VND", "");
+                    return double.Parse(value.Trim());
+                }
+                regex = new Regex(@"[,.0-9 ]+[d]");
+                match = regex.Match(reponse);
+                if (match.Success)
+                {
+                    string value = match.Value.Replace("d", "");
+                    return double.Parse(value.Trim());
+                }
 
-            return "Other";
+                regex = new Regex(@"[0-9.]+[ ]?[U][S][D]");
+                match = regex.Match(reponse);
+                if (match.Success)
+                {
+                    string value = match.Value.Replace("USD", "");
+                    return double.Parse(value.Trim());
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 0;
         }
         #endregion Reponse
 

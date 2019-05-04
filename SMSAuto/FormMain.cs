@@ -21,14 +21,25 @@ namespace SMSAuto
     {
         bool check = true;
         private Active active = new Active();
-
-        SerialPort sp = null;
-        private const string vidPattern = @"VID_([0-9A-F]{4})";
-        private const string pidPattern = @"PID_([0-9A-F]{4})";
         List<ComPort> listPort = new List<ComPort>();
+
+        List<ComPort> listPortProcess = new List<ComPort>();
+        List<ComPort> listPortProcessSuccess = new List<ComPort>();
+
+        private int i = 0;
+        private int count = 0;
+        private bool FLAG_PROCESS = true;
+        private string PASSWORD = "";
+        private BackgroundWorker backgWorker = new BackgroundWorker();
+
         public FormMain()
         {
             InitializeComponent();
+            backgWorker.WorkerReportsProgress = true;
+            backgWorker.WorkerSupportsCancellation = true;
+            backgWorker.DoWork += new DoWorkEventHandler(backgWorker_DoWork);
+            backgWorker.ProgressChanged += new ProgressChangedEventHandler(backgWorker_ProgressChanged);
+            backgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgWorker_RunWorkerCompleted);
             ProcessLoadStart();
         }
 
@@ -42,7 +53,7 @@ namespace SMSAuto
             {
                 try
                 {
-                    //check = active.checkActive();
+                    check = active.checkActive();
                 }
                 catch (Exception)
                 {
@@ -95,35 +106,6 @@ namespace SMSAuto
 
         #endregion
 
-        private void ProcessAction(string port)
-        {
-            ATAction action = new ATAction();
-            action.Initialization(port);
-           
-            try
-            {
-                action.ConnectPort();
-                string command = "AT+CUSD=1,\"*101#\",15\r";
-                action.SendCommand(command);
-                string reponse = action.ResponseReslut();
-                int a = 0;
-                while (string.IsNullOrEmpty(reponse))
-                {
-                    if (a == 5)
-                    {
-                        break;
-                    }
-                    Thread.Sleep(1000);
-                    reponse = action.ResponseReslut();                       
-                    a++;
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
         private void GetSerialPorts()
         {
             listPort = new List<ComPort>();
@@ -139,9 +121,9 @@ namespace SMSAuto
                         ComPort port = GetPortInfor(item);
                         AddRowToGridView(port);                     
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-
+                        Console.Write(e.Message);
                     }
                     finally
                     {
@@ -163,18 +145,15 @@ namespace SMSAuto
             List<string> ListCurrency = new List<string>();
             ChangeUI(() => cbPortSend.Items.Clear());
             ChangeUI(() => cbPortReceive.Items.Clear());
-            ChangeUI(() => cbCurrency.Items.Clear());
             List<ComPort> listnew = listPort.OrderBy(x => x.Name).ToList();
             foreach (var port in listnew)
             {
-                ChangeUI(() => cbPortSend.Items.Add(new ComboBoxItem(port.Name, port.Name)));
-                ChangeUI(() => cbPortReceive.Items.Add(new ComboBoxItem(port.Name, port.Name)));
-                if (!ListCurrency.Contains(port.Currency))
+                if (port.Status.Equals(Constant.STATUS_OK))
                 {
-                    ListCurrency.Add(port.Currency);
-                    ChangeUI(() => cbCurrency.Items.Add(new ComboBoxItem(port.Currency, port.Currency)));
+                    ChangeUI(() => cbPortSend.Items.Add(new ComboBoxItem(port.Name, port.Name)));
+                    ChangeUI(() => cbPortReceive.Items.Add(new ComboBoxItem(port.Name, port.Name)));
                 }
-            }          
+            }
         }
         private ComPort GetPortInfor(string port)
         {
@@ -183,10 +162,19 @@ namespace SMSAuto
             ATAction action = new ATAction();
             string reponse = action.CheckBanlce(port);
             c.Status = Utils.GetStatus(reponse);
-            c.Description = Utils.GetDescription(reponse);
             c.Phone = Utils.GetPhone(reponse);
-            c.Currency = Utils.GetCurrency(c.Description);
-            c.Money = Utils.GetMoney(c.Description);
+            if (c.Status.Equals(Constant.STATUS_OK) && string.IsNullOrEmpty(c.Phone))
+            {
+                 c.Phone = action.GetPhoneNumber(port);
+            }
+            c.Currency = Utils.GetCurrency(reponse);
+            c.Money = Utils.GetMoney(reponse);
+            if (!string.IsNullOrEmpty(reponse))
+            {
+                reponse = reponse.Replace(c.Phone, "");
+            }
+            
+            c.Description = Utils.GetDescription(reponse);
             listPort.Add(c);
             return c;
         }
@@ -196,11 +184,13 @@ namespace SMSAuto
             userCell.Value = gmail.Name;
             DataGridViewTextBoxCell userStatus = new DataGridViewTextBoxCell();
             userStatus.Value = gmail.Status;
+            DataGridViewTextBoxCell userPhone = new DataGridViewTextBoxCell();
+            userPhone.Value = gmail.Phone;
             DataGridViewTextBoxCell userInfor= new DataGridViewTextBoxCell();
             userInfor.Value = gmail.Description;
 
             DataGridViewRow newRow = new DataGridViewRow();
-            newRow.Cells.AddRange(userCell, userStatus, userInfor);
+            newRow.Cells.AddRange(userCell, userStatus, userPhone, userInfor);
             if (gmail.Status.Equals(Constant.STATUS_OK))
             {
                 newRow.DefaultCellStyle.BackColor = Color.LightGreen;
@@ -270,6 +260,28 @@ namespace SMSAuto
 
             }           
         }
+
+        private void ReloadStatusDataGridView(DataGridView dgv, int rowindex)
+        {
+            try
+            {
+                foreach(ComPort port in listPortProcessSuccess)
+                {
+                    if(port.Name.Equals(dgv[1, rowindex].Value))
+                    {
+                        dgv[4, rowindex].Value = "OK";
+                        return;
+                    }
+                }
+                dgv[4, rowindex].Value = "Error";
+              
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         private void btnLoadPort_Click(object sender, EventArgs e)
         {
             ChangeUI(() => btnLoadPort.Enabled = false);
@@ -278,11 +290,7 @@ namespace SMSAuto
 
             GetSerialPorts();
             
-        }
-        private void txtAmout_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
-        }
+        }     
         private void btnAddSend_Click(object sender, EventArgs e)
         {
             if(cbPortSend.SelectedItem == null)
@@ -350,7 +358,150 @@ namespace SMSAuto
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(txtPassword.Text))
+            {
+                MessageBox.Show("Please input password to process");
+                return;
+            }
+            PASSWORD = txtPassword.Text;
+            LoadListPortProcess();
+            FLAG_PROCESS = true;
+            i = 0;
+            count = listPortProcess.Count;
+            progressBar1.Maximum = count;
+            progressBar1.Value = i;
 
+            ChangeUI(() => btnStart.Enabled = false);
+            ChangeUI(() => btnStop.Enabled = true);
+            backgWorker.RunWorkerAsync();
         }
+
+        private void LoadListPortProcess()
+        {
+            listPortProcess = new List<ComPort>();
+            try
+            {
+                foreach (DataGridViewRow row in dgvSend.Rows)
+                {
+                    ComPort port = new ComPort();
+                    port.Name = row.Cells[1].Value.ToString();
+                    port.Phone = row.Cells[2].Value.ToString();
+                    port.Phone_Reveice = dgvReceive.Rows[row.Index].Cells[2].Value.ToString();
+                    port.Money = double.Parse(row.Cells[3].Value.ToString());
+                    listPortProcess.Add(port);
+                }
+            }
+            catch (Exception)
+            {
+
+            } 
+        }
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            FLAG_PROCESS = false;
+            if (backgWorker.WorkerSupportsCancellation == true)
+            {
+                backgWorker.CancelAsync();
+                backgWorker.Dispose();
+
+                while (backgWorker.IsBusy)
+                {
+                    Application.DoEvents();
+                    backgWorker = new BackgroundWorker();
+                    backgWorker.WorkerReportsProgress = true;
+                    backgWorker.WorkerSupportsCancellation = true;
+                    backgWorker.DoWork += new DoWorkEventHandler(backgWorker_DoWork);
+                    backgWorker.ProgressChanged += new ProgressChangedEventHandler(backgWorker_ProgressChanged);
+                    backgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgWorker_RunWorkerCompleted);
+                }
+                i = 0;
+                count = 0;
+                ChangeUI(() => btnStart.Enabled = true);
+                ChangeUI(() => btnStop.Enabled = false);
+            }
+        }
+
+        #region process
+        private int ProcessAction(ComPort port)
+        {
+            try
+            {
+                //string command = string.Format(Constant.COMMAND_TRANSFER, port.Phone_Reveice, Math.Floor(port.Money - 1), PASSWORD);
+                ChangeUI(() => lblRunning.Text = "Running : "+ port.Name);
+                ATAction action = new ATAction();
+                 string reponse = action.TransferMoney(port.Name, port.Phone_Reveice, Math.Floor(port.Money - 1), PASSWORD);
+                if (reponse.IndexOf("successfully") >=0)
+                {
+                    listPortProcessSuccess.Add(port);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            i++;
+            return i;
+        }
+        private void backgWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            while (i < count)
+            {
+                if ((worker.CancellationPending == true))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                else
+                {
+                    if (!FLAG_PROCESS)
+                    {
+                        break;
+                    }
+                    worker.ReportProgress(ProcessAction(listPortProcess[i]));
+                    
+                }
+            }
+        }
+        private void backgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if ((e.Cancelled == true))
+            {
+
+            }
+            else if (!(e.Error == null))
+            {
+
+                MessageBox.Show(e.Error.Message, Constant.TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            else
+            {
+                if (i == count || !FLAG_PROCESS)
+                {
+                    ChangeUI(() => btnStart.Enabled = true);
+                    ChangeUI(() => btnStop.Enabled = false);
+                    ChangeUI(() => lblStatus.Text = "Done");
+                }
+            }
+        }
+        private void backgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (!FLAG_PROCESS)
+            {
+                if (backgWorker.IsBusy)
+                {
+                    backgWorker.CancelAsync();
+                }
+                ChangeUI(() => btnStart.Enabled = true);
+                ChangeUI(() => btnStop.Enabled = false);
+            }
+            
+            progressBar1.Value = i;
+            ChangeUI(() => ReloadStatusDataGridView(dgvSend, i - 1));
+            
+        }
+
+        #endregion process
     }
 }

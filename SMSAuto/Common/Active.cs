@@ -71,23 +71,19 @@ namespace SMSAuto.Common
 
         public bool checkActive()
         {
-            if (!File.Exists(PATH_KEY_FILE))
-            {
-                return false;
-            }
+           
             getKeyID();
             if (keyActive.Count > 0)
             {
-                StreamReader reader = new StreamReader(PATH_KEY_FILE);
+                
                 try
                 {
-                    string key = reader.ReadLine();
+                    string key = "1476712986246292101361451806923118615620690";
                     foreach (string pair in keyActive)
                     {
                         string encode = encodeMd5(pair);
                         if (encode.Equals(key))
                         {
-                            reader.Close();
                             return true;
                         }
                     }
@@ -95,12 +91,9 @@ namespace SMSAuto.Common
                 }
                 catch (Exception)
                 {
-                    reader.Close();
                     return false;
-                }
-                reader.Close();
-            }
-            
+                } 
+            }  
             return false;
         }
 

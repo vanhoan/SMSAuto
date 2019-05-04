@@ -33,9 +33,10 @@
             this.dgvPort = new System.Windows.Forms.DataGridView();
             this.Port = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PhoneTransfer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Infor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lblTotal = new System.Windows.Forms.Label();
-            this.lblPortSelect = new System.Windows.Forms.Label();
+            this.lblRunning = new System.Windows.Forms.Label();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.btnLoadPort = new System.Windows.Forms.Button();
             this.picLoading = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -48,10 +49,6 @@
             this.btnDeleteSend = new System.Windows.Forms.Button();
             this.btnAddSend = new System.Windows.Forms.Button();
             this.dgvSend = new System.Windows.Forms.DataGridView();
-            this.No = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PortSend = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Money = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label2 = new System.Windows.Forms.Label();
             this.cbPortSend = new System.Windows.Forms.ComboBox();
             this.cbPortReceive = new System.Windows.Forms.ComboBox();
@@ -61,15 +58,23 @@
             this.btnDeleteRe = new System.Windows.Forms.Button();
             this.btnAddReceive = new System.Windows.Forms.Button();
             this.dgvReceive = new System.Windows.Forms.DataGridView();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PortReceive = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PhoneRe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MoneyRe = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.cbCurrency = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtAmout = new System.Windows.Forms.TextBox();
-            this.btnStop = new System.Windows.Forms.Button();
+            this.No = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PortSend = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Money = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StatusSend = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -78,11 +83,13 @@
             this.gbReceive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvReceive)).BeginInit();
             this.groupBox3.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(371, 576);
+            this.btnStart.Location = new System.Drawing.Point(365, 557);
             this.btnStart.Margin = new System.Windows.Forms.Padding(4);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(100, 28);
@@ -97,12 +104,14 @@
             this.dgvPort.AllowUserToDeleteRows = false;
             this.dgvPort.AllowUserToResizeColumns = false;
             this.dgvPort.AllowUserToResizeRows = false;
+            this.dgvPort.BackgroundColor = System.Drawing.Color.White;
             this.dgvPort.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPort.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Port,
             this.Status,
+            this.PhoneTransfer,
             this.Infor});
-            this.dgvPort.Location = new System.Drawing.Point(13, 48);
+            this.dgvPort.Location = new System.Drawing.Point(7, 29);
             this.dgvPort.Margin = new System.Windows.Forms.Padding(4);
             this.dgvPort.Name = "dgvPort";
             this.dgvPort.RowHeadersVisible = false;
@@ -123,6 +132,12 @@
             this.Status.ReadOnly = true;
             this.Status.Width = 60;
             // 
+            // PhoneTransfer
+            // 
+            this.PhoneTransfer.HeaderText = "Phone";
+            this.PhoneTransfer.Name = "PhoneTransfer";
+            this.PhoneTransfer.ReadOnly = true;
+            // 
             // Infor
             // 
             this.Infor.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -130,32 +145,31 @@
             this.Infor.Name = "Infor";
             this.Infor.ReadOnly = true;
             // 
-            // lblTotal
+            // lblRunning
             // 
-            this.lblTotal.AutoSize = true;
-            this.lblTotal.Location = new System.Drawing.Point(20, 554);
-            this.lblTotal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(46, 17);
-            this.lblTotal.TabIndex = 2;
-            this.lblTotal.Text = "label1";
+            this.lblRunning.AutoSize = true;
+            this.lblRunning.Location = new System.Drawing.Point(14, 535);
+            this.lblRunning.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblRunning.Name = "lblRunning";
+            this.lblRunning.Size = new System.Drawing.Size(73, 17);
+            this.lblRunning.TabIndex = 2;
+            this.lblRunning.Text = "Running : ";
             // 
-            // lblPortSelect
+            // lblStatus
             // 
-            this.lblPortSelect.AutoSize = true;
-            this.lblPortSelect.Location = new System.Drawing.Point(20, 587);
-            this.lblPortSelect.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblPortSelect.Name = "lblPortSelect";
-            this.lblPortSelect.Size = new System.Drawing.Size(46, 17);
-            this.lblPortSelect.TabIndex = 3;
-            this.lblPortSelect.Text = "label1";
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(18, 568);
+            this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 17);
+            this.lblStatus.TabIndex = 3;
             // 
             // btnLoadPort
             // 
             this.btnLoadPort.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnLoadPort.Image = ((System.Drawing.Image)(resources.GetObject("btnLoadPort.Image")));
             this.btnLoadPort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLoadPort.Location = new System.Drawing.Point(791, 22);
+            this.btnLoadPort.Location = new System.Drawing.Point(797, 3);
             this.btnLoadPort.Name = "btnLoadPort";
             this.btnLoadPort.Size = new System.Drawing.Size(113, 23);
             this.btnLoadPort.TabIndex = 4;
@@ -181,7 +195,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(924, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(930, 28);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -219,7 +233,7 @@
             this.gbSend.Controls.Add(this.dgvSend);
             this.gbSend.Controls.Add(this.label2);
             this.gbSend.Controls.Add(this.cbPortSend);
-            this.gbSend.Location = new System.Drawing.Point(13, 276);
+            this.gbSend.Location = new System.Drawing.Point(7, 257);
             this.gbSend.Name = "gbSend";
             this.gbSend.Size = new System.Drawing.Size(451, 213);
             this.gbSend.TabIndex = 8;
@@ -266,44 +280,20 @@
             // dgvSend
             // 
             this.dgvSend.AllowUserToAddRows = false;
+            this.dgvSend.BackgroundColor = System.Drawing.Color.White;
             this.dgvSend.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSend.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.No,
             this.PortSend,
             this.Phone,
-            this.Money});
+            this.Money,
+            this.StatusSend});
             this.dgvSend.Location = new System.Drawing.Point(9, 63);
             this.dgvSend.Name = "dgvSend";
             this.dgvSend.RowHeadersVisible = false;
             this.dgvSend.RowTemplate.Height = 24;
             this.dgvSend.Size = new System.Drawing.Size(402, 144);
             this.dgvSend.TabIndex = 4;
-            // 
-            // No
-            // 
-            this.No.HeaderText = "No";
-            this.No.Name = "No";
-            this.No.ReadOnly = true;
-            this.No.Width = 50;
-            // 
-            // PortSend
-            // 
-            this.PortSend.HeaderText = "Port";
-            this.PortSend.Name = "PortSend";
-            this.PortSend.ReadOnly = true;
-            this.PortSend.Width = 60;
-            // 
-            // Phone
-            // 
-            this.Phone.HeaderText = "Phone";
-            this.Phone.Name = "Phone";
-            // 
-            // Money
-            // 
-            this.Money.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Money.HeaderText = "Money";
-            this.Money.Name = "Money";
-            this.Money.ReadOnly = true;
             // 
             // label2
             // 
@@ -349,7 +339,7 @@
             this.gbReceive.Controls.Add(this.dgvReceive);
             this.gbReceive.Controls.Add(this.label1);
             this.gbReceive.Controls.Add(this.cbPortReceive);
-            this.gbReceive.Location = new System.Drawing.Point(470, 277);
+            this.gbReceive.Location = new System.Drawing.Point(464, 258);
             this.gbReceive.Name = "gbReceive";
             this.gbReceive.Size = new System.Drawing.Size(447, 212);
             this.gbReceive.TabIndex = 3;
@@ -396,6 +386,7 @@
             // dgvReceive
             // 
             this.dgvReceive.AllowUserToAddRows = false;
+            this.dgvReceive.BackgroundColor = System.Drawing.Color.White;
             this.dgvReceive.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvReceive.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
@@ -409,12 +400,96 @@
             this.dgvReceive.Size = new System.Drawing.Size(400, 144);
             this.dgvReceive.TabIndex = 5;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.txtPassword);
+            this.groupBox3.Location = new System.Drawing.Point(7, 471);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(904, 61);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Transfer Money";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(11, 31);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(81, 17);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Password : ";
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Location = new System.Drawing.Point(98, 28);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Size = new System.Drawing.Size(100, 22);
+            this.txtPassword.TabIndex = 6;
+            // 
+            // btnStop
+            // 
+            this.btnStop.Location = new System.Drawing.Point(473, 557);
+            this.btnStop.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(100, 28);
+            this.btnStop.TabIndex = 10;
+            this.btnStop.Text = "Stop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(3, 44);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(924, 621);
+            this.tabControl1.TabIndex = 11;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.dgvPort);
+            this.tabPage1.Controls.Add(this.btnStop);
+            this.tabPage1.Controls.Add(this.btnStart);
+            this.tabPage1.Controls.Add(this.groupBox3);
+            this.tabPage1.Controls.Add(this.lblRunning);
+            this.tabPage1.Controls.Add(this.gbReceive);
+            this.tabPage1.Controls.Add(this.lblStatus);
+            this.tabPage1.Controls.Add(this.gbSend);
+            this.tabPage1.Controls.Add(this.btnLoadPort);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(916, 592);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Transfer Money";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(916, 592);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Active";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(4, 668);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(920, 23);
+            this.progressBar1.TabIndex = 12;
+            // 
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.HeaderText = "No";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 50;
+            this.dataGridViewTextBoxColumn1.Width = 40;
             // 
             // PortReceive
             // 
@@ -435,71 +510,50 @@
             this.MoneyRe.Name = "MoneyRe";
             this.MoneyRe.ReadOnly = true;
             // 
-            // groupBox3
+            // No
             // 
-            this.groupBox3.Controls.Add(this.cbCurrency);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.txtAmout);
-            this.groupBox3.Location = new System.Drawing.Point(13, 490);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(904, 61);
-            this.groupBox3.TabIndex = 9;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Transfer Money";
+            this.No.HeaderText = "No";
+            this.No.Name = "No";
+            this.No.ReadOnly = true;
+            this.No.Width = 40;
             // 
-            // cbCurrency
+            // PortSend
             // 
-            this.cbCurrency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbCurrency.FormattingEnabled = true;
-            this.cbCurrency.Location = new System.Drawing.Point(185, 24);
-            this.cbCurrency.Name = "cbCurrency";
-            this.cbCurrency.Size = new System.Drawing.Size(61, 24);
-            this.cbCurrency.TabIndex = 5;
+            this.PortSend.HeaderText = "Port";
+            this.PortSend.Name = "PortSend";
+            this.PortSend.ReadOnly = true;
+            this.PortSend.Width = 60;
             // 
-            // label3
+            // Phone
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 27);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 17);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Amout : ";
+            this.Phone.HeaderText = "Phone";
+            this.Phone.Name = "Phone";
             // 
-            // txtAmout
+            // Money
             // 
-            this.txtAmout.Location = new System.Drawing.Point(79, 24);
-            this.txtAmout.Name = "txtAmout";
-            this.txtAmout.Size = new System.Drawing.Size(100, 22);
-            this.txtAmout.TabIndex = 0;
-            this.txtAmout.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAmout_KeyPress);
+            this.Money.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Money.HeaderText = "Money";
+            this.Money.Name = "Money";
+            this.Money.ReadOnly = true;
             // 
-            // btnStop
+            // StatusSend
             // 
-            this.btnStop.Location = new System.Drawing.Point(479, 576);
-            this.btnStop.Margin = new System.Windows.Forms.Padding(4);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(100, 28);
-            this.btnStop.TabIndex = 10;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = true;
+            this.StatusSend.HeaderText = "Status";
+            this.StatusSend.Name = "StatusSend";
+            this.StatusSend.ReadOnly = true;
+            this.StatusSend.Width = 50;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(924, 613);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.gbReceive);
-            this.Controls.Add(this.gbSend);
+            this.ClientSize = new System.Drawing.Size(930, 692);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.picLoading);
-            this.Controls.Add(this.btnLoadPort);
-            this.Controls.Add(this.lblPortSelect);
-            this.Controls.Add(this.lblTotal);
-            this.Controls.Add(this.dgvPort);
-            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
@@ -517,6 +571,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvReceive)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -526,13 +583,10 @@
 
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.DataGridView dgvPort;
-        private System.Windows.Forms.Label lblTotal;
-        private System.Windows.Forms.Label lblPortSelect;
+        private System.Windows.Forms.Label lblRunning;
+        private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnLoadPort;
         private System.Windows.Forms.PictureBox picLoading;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Port;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Infor;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
@@ -553,18 +607,26 @@
         private System.Windows.Forms.Button btnClearSend;
         private System.Windows.Forms.Button btnClearRe;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtAmout;
-        private System.Windows.Forms.ComboBox cbCurrency;
         private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.DataGridViewTextBoxColumn No;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PortSend;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Phone;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Money;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Port;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PhoneTransfer;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Infor;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn PortReceive;
         private System.Windows.Forms.DataGridViewTextBoxColumn PhoneRe;
         private System.Windows.Forms.DataGridViewTextBoxColumn MoneyRe;
+        private System.Windows.Forms.DataGridViewTextBoxColumn No;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PortSend;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Phone;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Money;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StatusSend;
     }
 }
 
