@@ -105,15 +105,20 @@ namespace SMSAuto.Common
                 csvFileWriter.Close();
             }
         }
-        public static void WriteFileAccount(string data, string file)
+        public static void WriteFilePort(List<ComPort> data, string file)
         {
-            DateTime date = DateTime.Now;
-            string datestr = date.ToString("yyyy-MM-dd");
-            string path = string.Format(file, datestr);
-            StreamWriter csvFileWriter = new StreamWriter(path, true, Encoding.UTF8);
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+            StreamWriter csvFileWriter = new StreamWriter(file, true, Encoding.UTF8);
             try
             {
-                csvFileWriter.WriteLine(data);
+                foreach (ComPort port in data)
+                {
+                    string str = port.Name + "," + port.Phone + "," + port.Money;
+                    csvFileWriter.WriteLine(str);  
+                }
                 csvFileWriter.Flush();
                 csvFileWriter.Close();
             }
@@ -143,6 +148,35 @@ namespace SMSAuto.Common
                 csvFileWriter.Close();
             }
         }
+        public static List<ComPort> ReadFilePort(string file)
+        {
+            List<ComPort> listdata = new List<ComPort>();
+            if (!File.Exists(file))
+            {
+                return listdata;
+            }
+            StreamReader fileReader = new StreamReader(file);
+            try
+            {
+                while (!fileReader.EndOfStream)
+                {                   
+                    string data = fileReader.ReadLine();
+                    string[] arr = data.Split(',');
+                    ComPort port = new ComPort();
+                    port.Name = arr[0];
+                    port.Phone = arr[1];
+                    port.Money = double.Parse(arr[2]);
+                    listdata.Add(port);
+                }
+                fileReader.Close();
+            }
+            catch (Exception)
+            {
+                fileReader.Close();
+            }
+            return listdata;
+        }
+
         public static string ReadFile(string file)
         {
             string data = "";
@@ -195,6 +229,7 @@ namespace SMSAuto.Common
             }
             else
             {
+                Utils.WriteFileLog(reponse);
                 return Constant.STATUS_TIMEOUT;
             }
         }
@@ -253,23 +288,23 @@ namespace SMSAuto.Common
                 {
                     return 0;
                 }
-                Regex regex = new Regex(@"[0-9.]+[ ]?[V]+[N]+[D]+");
+                Regex regex = new Regex(@"[0-9.]+[ ]?[USD]{3}");
                 Match match = regex.Match(reponse);
-                if (match.Success)
-                {
-                    string value = match.Value.Replace("VND", "");
-                    return double.Parse(value.Trim());
-                }
-                regex = new Regex(@"[,.0-9 ]+[d]");
-                match = regex.Match(reponse);
-                if (match.Success)
-                {
-                    string value = match.Value.Replace("d", "");
-                    return double.Parse(value.Trim());
-                }
+                //if (match.Success)
+                //{
+                //    string value = match.Value.Replace("VND", "");
+                //    return double.Parse(value.Trim());
+                //}
+                //regex = new Regex(@"[,.0-9 ]+[d]");
+                //match = regex.Match(reponse);
+                //if (match.Success)
+                //{
+                //    string value = match.Value.Replace("d", "");
+                //    return double.Parse(value.Trim());
+                //}
 
-                regex = new Regex(@"[0-9.]+[ ]?[U][S][D]");
-                match = regex.Match(reponse);
+                //regex = new Regex(@"[0-9.]+[ ]?[U][S][D]");
+                //match = regex.Match(reponse);
                 if (match.Success)
                 {
                     string value = match.Value.Replace("USD", "");

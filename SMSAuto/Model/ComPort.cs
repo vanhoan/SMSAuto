@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SMSAuto.Model
 {
-    class ComPort
+    public class ComPort
     {
         
         public string Name;

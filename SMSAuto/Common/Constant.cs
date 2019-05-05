@@ -10,6 +10,8 @@ namespace SMSAuto.Common
     {
         public static string PATH_LOG = "agents\\SMSAuto\\Logs";
         public static string PATH_FILE_LOG = "agents\\SMSAuto\\Logs\\{0}_log.txt";
+        public static string PATH_FILE_SEND = "agents\\SMSAuto\\Config\\send.txt";
+        public static string PATH_FILE_REVEICE = "agents\\SMSAuto\\Config\\reveice.txt";
 
         public static string IMAGE_TEMP = "agents\\SMSAuto\\Temp\\imagetemp.png";
         public static string IMAGE_COMPLATE = "agents\\SMSAuto\\Temp\\complete.png";

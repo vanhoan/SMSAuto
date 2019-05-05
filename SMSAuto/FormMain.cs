@@ -25,6 +25,8 @@ namespace SMSAuto
 
         List<ComPort> listPortProcess = new List<ComPort>();
         List<ComPort> listPortProcessSuccess = new List<ComPort>();
+        List<ComPort> listPortSend = new List<ComPort>();
+        List<ComPort> listPortReveice = new List<ComPort>();
 
         private int i = 0;
         private int count = 0;
@@ -260,7 +262,6 @@ namespace SMSAuto
 
             }           
         }
-
         private void ReloadStatusDataGridView(DataGridView dgv, int rowindex)
         {
             try
@@ -379,6 +380,8 @@ namespace SMSAuto
         private void LoadListPortProcess()
         {
             listPortProcess = new List<ComPort>();
+            listPortSend = new List<ComPort>();
+            listPortReveice = new List<ComPort>();
             try
             {
                 foreach (DataGridViewRow row in dgvSend.Rows)
@@ -388,8 +391,21 @@ namespace SMSAuto
                     port.Phone = row.Cells[2].Value.ToString();
                     port.Phone_Reveice = dgvReceive.Rows[row.Index].Cells[2].Value.ToString();
                     port.Money = double.Parse(row.Cells[3].Value.ToString());
+                    listPortSend.Add(port);
                     listPortProcess.Add(port);
                 }
+
+                foreach (DataGridViewRow row in dgvReceive.Rows)
+                {
+                    ComPort port = new ComPort();
+                    port.Name = row.Cells[1].Value.ToString();
+                    port.Phone = row.Cells[2].Value.ToString();
+                    port.Money = double.Parse(row.Cells[3].Value.ToString());
+                    listPortReveice.Add(port);
+                }
+
+                Utils.WriteFilePort(listPortSend, Constant.PATH_FILE_SEND);
+                Utils.WriteFilePort(listPortReveice, Constant.PATH_FILE_REVEICE);
             }
             catch (Exception)
             {
@@ -418,6 +434,27 @@ namespace SMSAuto
                 count = 0;
                 ChangeUI(() => btnStart.Enabled = true);
                 ChangeUI(() => btnStop.Enabled = false);
+            }
+        }
+        private void rbNone_CheckedChanged(object sender, EventArgs e)
+        {
+            dgvSend.Rows.Clear();
+            dgvReceive.Rows.Clear();
+            listPortSend = new List<ComPort>();
+            listPortReveice = new List<ComPort>();
+        }
+        private void rbLastConfig_CheckedChanged(object sender, EventArgs e)
+        {
+            listPortSend = Utils.ReadFilePort(Constant.PATH_FILE_SEND);
+            listPortReveice = Utils.ReadFilePort(Constant.PATH_FILE_REVEICE);
+            foreach (ComPort port in listPortSend)
+            {
+                AddRowToGridViewTransfer(port, dgvSend);
+            }
+
+            foreach (ComPort port in listPortReveice)
+            {
+                AddRowToGridViewTransfer(port, dgvReceive);
             }
         }
 
@@ -503,5 +540,7 @@ namespace SMSAuto
         }
 
         #endregion process
+
+       
     }
 }
