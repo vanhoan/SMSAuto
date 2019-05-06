@@ -25,6 +25,7 @@ namespace SMSAuto
 
         List<ComPort> listPortProcess = new List<ComPort>();
         List<ComPort> listPortProcessSuccess = new List<ComPort>();
+        List<ComPort> listPortActive = new List<ComPort>();
         List<ComPort> listPortSend = new List<ComPort>();
         List<ComPort> listPortReveice = new List<ComPort>();
 
@@ -112,7 +113,17 @@ namespace SMSAuto
         {
             listPort = new List<ComPort>();
             string[] listPo = System.IO.Ports.SerialPort.GetPortNames();
+            if (listPo.Length > 0)
+            {
+                ChangeUI(() => btnLoadPort.Enabled = false);
+                ChangeUI(() => gbSend.Enabled = false);
+                ChangeUI(() => gbReceive.Enabled = false);
+                ChangeUI(() => btnConnect.Enabled = false);
+            }
             int index = 0;
+            dgvPort.Rows.Clear();
+            dgvSend.Rows.Clear();
+            dgvReceive.Rows.Clear();
             foreach (string item in listPo)
             {
                 Thread t = new Thread(
@@ -137,11 +148,13 @@ namespace SMSAuto
                             ChangeUI(() => btnLoadPort.Enabled = true);
                             SetDataComBoBox();
                         }
+                        ChangeUI(() => lblTotalActive.Text = listPortActive.Count.ToString());
                     }
                 });
                 t.Start();
             }
         }
+
         private void SetDataComBoBox()
         {
             List<string> ListCurrency = new List<string>();
@@ -178,8 +191,51 @@ namespace SMSAuto
             
             c.Description = Utils.GetDescription(reponse);
             listPort.Add(c);
+            if (c.Status.Equals(Constant.STATUS_OK))
+            {
+                listPortActive.Add(c);
+            }
+                return c;
+        }
+        private ComPort CheckingConnect(string port)
+        {
+            ComPort c = new ComPort();
+            c.Name = port;
+            ATAction action = new ATAction();
+            string reponse = action.CheckConnect(port);
+            c.Status = Utils.GetStatus(reponse);
+            if (reponse.IndexOf("OK") >= 0)
+            {
+                c.Status = Constant.STATUS_OK;
+            }
+            else if (reponse.IndexOf("ERROR") >= 0)
+            {
+                c.Status = Constant.STATUS_ERROR;
+            }
+            else
+            {
+                c.Status = Constant.STATUS_TIMEOUT;
+            }
+            if (c.Status.Equals(Constant.STATUS_OK) && string.IsNullOrEmpty(c.Phone))
+            {
+                c.Phone = action.GetPhoneNumber(port);
+            }
+            c.Currency = Utils.GetCurrency(reponse);
+            c.Money = Utils.GetMoney(reponse);
+            if (!string.IsNullOrEmpty(reponse))
+            {
+                reponse = reponse.Replace(c.Phone, "");
+            }
+
+            c.Description = Utils.GetDescription(reponse);
+            listPort.Add(c);
+            if (c.Status.Equals(Constant.STATUS_OK))
+            {
+                listPortActive.Add(c);
+            }
             return c;
         }
+
         private void AddRowToGridView(ComPort gmail)
         {
             DataGridViewTextBoxCell userCell = new DataGridViewTextBoxCell();
@@ -285,13 +341,56 @@ namespace SMSAuto
 
         private void btnLoadPort_Click(object sender, EventArgs e)
         {
-            ChangeUI(() => btnLoadPort.Enabled = false);
-            ChangeUI(() => gbSend.Enabled = false);
-            ChangeUI(() => gbReceive.Enabled = false);
-
             GetSerialPorts();
-            
-        }     
+        }
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+
+            listPort = new List<ComPort>();
+            string[] listPo = System.IO.Ports.SerialPort.GetPortNames();
+            if(listPo.Length > 0)
+            {
+                ChangeUI(() => btnLoadPort.Enabled = false);
+                ChangeUI(() => gbSend.Enabled = false);
+                ChangeUI(() => gbReceive.Enabled = false);
+                ChangeUI(() => btnConnect.Enabled = false);
+            }
+
+            int index = 0;
+            dgvPort.Rows.Clear();
+            dgvSend.Rows.Clear();
+            dgvReceive.Rows.Clear();
+            foreach (string item in listPo)
+            {
+                Thread t = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        ComPort port = CheckingConnect(item);
+                        AddRowToGridView(port);
+                    }
+                    catch (Exception e1)
+                    {
+                        Utils.WriteFileLog(e1.Message);
+                    }
+                    finally
+                    {
+                        index++;
+                        if (index == listPo.Length - 1)
+                        {
+                            ChangeUI(() => gbSend.Enabled = true);
+                            ChangeUI(() => gbReceive.Enabled = true);
+                            ChangeUI(() => btnLoadPort.Enabled = true);
+                            SetDataComBoBox();
+                        }
+                        ChangeUI(() => lblTotalActive.Text = listPortActive.Count.ToString());
+                    }
+                });
+                t.Start();
+            }
+        }
+
         private void btnAddSend_Click(object sender, EventArgs e)
         {
             if(cbPortSend.SelectedItem == null)
@@ -538,6 +637,7 @@ namespace SMSAuto
             ChangeUI(() => ReloadStatusDataGridView(dgvSend, i - 1));
             
         }
+
 
         #endregion process
 

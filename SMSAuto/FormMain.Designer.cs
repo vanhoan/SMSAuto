@@ -68,6 +68,8 @@
             this.PhoneRe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MoneyRe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.rbLastConfig = new System.Windows.Forms.RadioButton();
+            this.rbNone = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnStop = new System.Windows.Forms.Button();
@@ -75,8 +77,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.rbNone = new System.Windows.Forms.RadioButton();
-            this.rbLastConfig = new System.Windows.Forms.RadioButton();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.lblTotalActive = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -477,6 +479,30 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Transfer Money";
             // 
+            // rbLastConfig
+            // 
+            this.rbLastConfig.AutoSize = true;
+            this.rbLastConfig.Location = new System.Drawing.Point(791, 21);
+            this.rbLastConfig.Name = "rbLastConfig";
+            this.rbLastConfig.Size = new System.Drawing.Size(98, 21);
+            this.rbLastConfig.TabIndex = 9;
+            this.rbLastConfig.Text = "Last config";
+            this.rbLastConfig.UseVisualStyleBackColor = true;
+            this.rbLastConfig.CheckedChanged += new System.EventHandler(this.rbLastConfig_CheckedChanged);
+            // 
+            // rbNone
+            // 
+            this.rbNone.AutoSize = true;
+            this.rbNone.Checked = true;
+            this.rbNone.Location = new System.Drawing.Point(713, 21);
+            this.rbNone.Name = "rbNone";
+            this.rbNone.Size = new System.Drawing.Size(63, 21);
+            this.rbNone.TabIndex = 8;
+            this.rbNone.TabStop = true;
+            this.rbNone.Text = "None";
+            this.rbNone.UseVisualStyleBackColor = true;
+            this.rbNone.CheckedChanged += new System.EventHandler(this.rbNone_CheckedChanged);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -519,6 +545,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lblTotalActive);
+            this.tabPage1.Controls.Add(this.btnConnect);
             this.tabPage1.Controls.Add(this.dgvPort);
             this.tabPage1.Controls.Add(this.btnStop);
             this.tabPage1.Controls.Add(this.btnStart);
@@ -553,29 +581,28 @@
             this.progressBar1.Size = new System.Drawing.Size(920, 23);
             this.progressBar1.TabIndex = 12;
             // 
-            // rbNone
+            // btnConnect
             // 
-            this.rbNone.AutoSize = true;
-            this.rbNone.Checked = true;
-            this.rbNone.Location = new System.Drawing.Point(713, 21);
-            this.rbNone.Name = "rbNone";
-            this.rbNone.Size = new System.Drawing.Size(63, 21);
-            this.rbNone.TabIndex = 8;
-            this.rbNone.TabStop = true;
-            this.rbNone.Text = "None";
-            this.rbNone.UseVisualStyleBackColor = true;
-            this.rbNone.CheckedChanged += new System.EventHandler(this.rbNone_CheckedChanged);
+            this.btnConnect.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnConnect.Image")));
+            this.btnConnect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnConnect.Location = new System.Drawing.Point(671, 3);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(111, 23);
+            this.btnConnect.TabIndex = 11;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
-            // rbLastConfig
+            // lblTotalActive
             // 
-            this.rbLastConfig.AutoSize = true;
-            this.rbLastConfig.Location = new System.Drawing.Point(791, 21);
-            this.rbLastConfig.Name = "rbLastConfig";
-            this.rbLastConfig.Size = new System.Drawing.Size(98, 21);
-            this.rbLastConfig.TabIndex = 9;
-            this.rbLastConfig.Text = "Last config";
-            this.rbLastConfig.UseVisualStyleBackColor = true;
-            this.rbLastConfig.CheckedChanged += new System.EventHandler(this.rbLastConfig_CheckedChanged);
+            this.lblTotalActive.AutoSize = true;
+            this.lblTotalActive.Location = new System.Drawing.Point(7, 7);
+            this.lblTotalActive.Name = "lblTotalActive";
+            this.lblTotalActive.Size = new System.Drawing.Size(16, 17);
+            this.lblTotalActive.TabIndex = 12;
+            this.lblTotalActive.Text = "0";
             // 
             // FormMain
             // 
@@ -663,6 +690,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StatusSend;
         private System.Windows.Forms.RadioButton rbLastConfig;
         private System.Windows.Forms.RadioButton rbNone;
+        private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.Label lblTotalActive;
     }
 }
 

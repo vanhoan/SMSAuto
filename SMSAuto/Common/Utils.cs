@@ -133,7 +133,7 @@ namespace SMSAuto.Common
             string datestr = date.ToString("yyyy-MM-dd");
             if (!Directory.Exists(Constant.PATH_LOG))
             {
-                Directory.CreateDirectory(Constant.PATH_FILE_LOG);
+                Directory.CreateDirectory(Constant.PATH_LOG);
             }
             string file = string.Format(Constant.PATH_FILE_LOG, datestr);
             StreamWriter csvFileWriter = new StreamWriter(file, true, Encoding.UTF8);

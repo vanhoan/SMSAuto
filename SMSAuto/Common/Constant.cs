@@ -22,6 +22,7 @@ namespace SMSAuto.Common
         public static string STATUS_TIMEOUT = "Timeout";
         public static string STATUS_ERROR = "Error";
 
+        public static string COMMAND_TEST = "AT\r";
         public static string COMMAND_BALANCE = "AT+CUSD=1,\"*101#\",15\r";
         public static string COMMAND_PHONE = "AT+CNUM\r";
         public static string COMMAND_TRANSFER = "AT+CUSD=1,\"*100*{0}*{1}*{2}#\",15\r";
