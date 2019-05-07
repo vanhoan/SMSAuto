@@ -13,7 +13,7 @@ namespace SMSAuto.Model
         public string Status_Send;
         public string Phone;
         public string Phone_Reveice;
-        public double Money;
+        public double Money = 0;
         public string Currency;
         public string Description;
 

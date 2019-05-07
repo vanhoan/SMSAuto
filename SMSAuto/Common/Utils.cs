@@ -129,23 +129,25 @@ namespace SMSAuto.Common
         }
         public static void WriteFileLog(string data)
         {
-            DateTime date = DateTime.Now;
-            string datestr = date.ToString("yyyy-MM-dd");
-            if (!Directory.Exists(Constant.PATH_LOG))
-            {
-                Directory.CreateDirectory(Constant.PATH_LOG);
-            }
-            string file = string.Format(Constant.PATH_FILE_LOG, datestr);
-            StreamWriter csvFileWriter = new StreamWriter(file, true, Encoding.UTF8);
+            StreamWriter csvFileWriter = null;          
             try
             {
+                DateTime date = DateTime.Now;
+                string datestr = date.ToString("yyyy-MM-dd");
+                if (!Directory.Exists(Constant.PATH_LOG))
+                {
+                    Directory.CreateDirectory(Constant.PATH_LOG);
+                }
+                string file = string.Format(Constant.PATH_FILE_LOG, datestr);
+                csvFileWriter = new StreamWriter(file, true, Encoding.UTF8);
                 csvFileWriter.WriteLine(data);
                 csvFileWriter.Flush();
                 csvFileWriter.Close();
             }
             catch (Exception)
             {
-                csvFileWriter.Close();
+                if(csvFileWriter != null)
+                    csvFileWriter.Close();
             }
         }
         public static List<ComPort> ReadFilePort(string file)

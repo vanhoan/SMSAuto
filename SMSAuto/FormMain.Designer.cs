@@ -75,10 +75,30 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.btnConnect = new System.Windows.Forms.Button();
+            this.chkAddPort = new System.Windows.Forms.CheckBox();
+            this.btnStopLoadPort = new System.Windows.Forms.Button();
             this.lblTotalActive = new System.Windows.Forms.Label();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lblStatusActive = new System.Windows.Forms.Label();
+            this.btnLoadPortActive = new System.Windows.Forms.Button();
+            this.chkCheckAll = new System.Windows.Forms.CheckBox();
+            this.btnStopActive = new System.Windows.Forms.Button();
+            this.btnStartActive = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtPassActive = new System.Windows.Forms.TextBox();
+            this.lblTotalPortActive = new System.Windows.Forms.Label();
+            this.dgvPortActive = new System.Windows.Forms.DataGridView();
+            this.Process = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Actived = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GetSMS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ChangePass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.InforActive = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -89,13 +109,16 @@
             this.groupBox3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPortActive)).BeginInit();
             this.SuspendLayout();
             // 
             // btnStart
             // 
             this.btnStart.Image = ((System.Drawing.Image)(resources.GetObject("btnStart.Image")));
             this.btnStart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnStart.Location = new System.Drawing.Point(372, 557);
+            this.btnStart.Location = new System.Drawing.Point(372, 591);
             this.btnStart.Margin = new System.Windows.Forms.Padding(4);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(86, 28);
@@ -118,11 +141,11 @@
             this.Status,
             this.PhoneTransfer,
             this.Infor});
-            this.dgvPort.Location = new System.Drawing.Point(7, 29);
+            this.dgvPort.Location = new System.Drawing.Point(7, 33);
             this.dgvPort.Margin = new System.Windows.Forms.Padding(4);
             this.dgvPort.Name = "dgvPort";
             this.dgvPort.RowHeadersVisible = false;
-            this.dgvPort.Size = new System.Drawing.Size(904, 224);
+            this.dgvPort.Size = new System.Drawing.Size(904, 220);
             this.dgvPort.TabIndex = 1;
             // 
             // Port
@@ -155,7 +178,7 @@
             // lblRunning
             // 
             this.lblRunning.AutoSize = true;
-            this.lblRunning.Location = new System.Drawing.Point(14, 535);
+            this.lblRunning.Location = new System.Drawing.Point(14, 569);
             this.lblRunning.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblRunning.Name = "lblRunning";
             this.lblRunning.Size = new System.Drawing.Size(73, 17);
@@ -165,7 +188,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(18, 568);
+            this.lblStatus.Location = new System.Drawing.Point(18, 602);
             this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 17);
@@ -173,21 +196,18 @@
             // 
             // btnLoadPort
             // 
-            this.btnLoadPort.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnLoadPort.Image = ((System.Drawing.Image)(resources.GetObject("btnLoadPort.Image")));
             this.btnLoadPort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLoadPort.Location = new System.Drawing.Point(797, 3);
+            this.btnLoadPort.Location = new System.Drawing.Point(124, 253);
             this.btnLoadPort.Name = "btnLoadPort";
-            this.btnLoadPort.Size = new System.Drawing.Size(113, 23);
+            this.btnLoadPort.Size = new System.Drawing.Size(88, 32);
             this.btnLoadPort.TabIndex = 4;
             this.btnLoadPort.Text = "Load Port";
-            this.btnLoadPort.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnLoadPort.UseVisualStyleBackColor = true;
             this.btnLoadPort.Click += new System.EventHandler(this.btnLoadPort_Click);
             // 
             // picLoading
             // 
-            this.picLoading.Location = new System.Drawing.Point(322, 0);
+            this.picLoading.Location = new System.Drawing.Point(824, 0);
             this.picLoading.Name = "picLoading";
             this.picLoading.Size = new System.Drawing.Size(100, 28);
             this.picLoading.TabIndex = 6;
@@ -240,7 +260,7 @@
             this.gbSend.Controls.Add(this.dgvSend);
             this.gbSend.Controls.Add(this.label2);
             this.gbSend.Controls.Add(this.cbPortSend);
-            this.gbSend.Location = new System.Drawing.Point(7, 318);
+            this.gbSend.Location = new System.Drawing.Point(7, 352);
             this.gbSend.Name = "gbSend";
             this.gbSend.Size = new System.Drawing.Size(451, 213);
             this.gbSend.TabIndex = 8;
@@ -379,7 +399,7 @@
             this.gbReceive.Controls.Add(this.dgvReceive);
             this.gbReceive.Controls.Add(this.label1);
             this.gbReceive.Controls.Add(this.cbPortReceive);
-            this.gbReceive.Location = new System.Drawing.Point(464, 319);
+            this.gbReceive.Location = new System.Drawing.Point(464, 353);
             this.gbReceive.Name = "gbReceive";
             this.gbReceive.Size = new System.Drawing.Size(447, 212);
             this.gbReceive.TabIndex = 3;
@@ -416,7 +436,7 @@
             this.btnAddReceive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAddReceive.Location = new System.Drawing.Point(196, 26);
             this.btnAddReceive.Name = "btnAddReceive";
-            this.btnAddReceive.Size = new System.Drawing.Size(76, 25);
+            this.btnAddReceive.Size = new System.Drawing.Size(76, 27);
             this.btnAddReceive.TabIndex = 6;
             this.btnAddReceive.Text = "Add";
             this.btnAddReceive.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -472,7 +492,7 @@
             this.groupBox3.Controls.Add(this.rbNone);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.txtPassword);
-            this.groupBox3.Location = new System.Drawing.Point(6, 255);
+            this.groupBox3.Location = new System.Drawing.Point(6, 289);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(904, 61);
             this.groupBox3.TabIndex = 9;
@@ -523,7 +543,7 @@
             // 
             this.btnStop.Image = ((System.Drawing.Image)(resources.GetObject("btnStop.Image")));
             this.btnStop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnStop.Location = new System.Drawing.Point(473, 557);
+            this.btnStop.Location = new System.Drawing.Point(473, 591);
             this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(85, 28);
@@ -540,11 +560,13 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 44);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(924, 621);
+            this.tabControl1.Size = new System.Drawing.Size(924, 649);
             this.tabControl1.TabIndex = 11;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkAddPort);
+            this.tabPage1.Controls.Add(this.btnStopLoadPort);
             this.tabPage1.Controls.Add(this.lblTotalActive);
             this.tabPage1.Controls.Add(this.btnConnect);
             this.tabPage1.Controls.Add(this.dgvPort);
@@ -559,57 +581,259 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(916, 592);
+            this.tabPage1.Size = new System.Drawing.Size(916, 620);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Transfer Money";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // chkAddPort
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(916, 592);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Active";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.chkAddPort.AutoSize = true;
+            this.chkAddPort.Checked = true;
+            this.chkAddPort.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAddPort.Location = new System.Drawing.Point(257, 259);
+            this.chkAddPort.Name = "chkAddPort";
+            this.chkAddPort.Size = new System.Drawing.Size(143, 21);
+            this.chkAddPort.TabIndex = 14;
+            this.chkAddPort.Text = "Add Port Transfer";
+            this.chkAddPort.UseVisualStyleBackColor = true;
             // 
-            // progressBar1
+            // btnStopLoadPort
             // 
-            this.progressBar1.Location = new System.Drawing.Point(4, 668);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(920, 23);
-            this.progressBar1.TabIndex = 12;
-            // 
-            // btnConnect
-            // 
-            this.btnConnect.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnConnect.Image")));
-            this.btnConnect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnConnect.Location = new System.Drawing.Point(671, 3);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(111, 23);
-            this.btnConnect.TabIndex = 11;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            this.btnStopLoadPort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnStopLoadPort.Location = new System.Drawing.Point(124, 253);
+            this.btnStopLoadPort.Name = "btnStopLoadPort";
+            this.btnStopLoadPort.Size = new System.Drawing.Size(62, 32);
+            this.btnStopLoadPort.TabIndex = 13;
+            this.btnStopLoadPort.Text = "Stop";
+            this.btnStopLoadPort.UseVisualStyleBackColor = true;
+            this.btnStopLoadPort.Visible = false;
+            this.btnStopLoadPort.Click += new System.EventHandler(this.btnStopLoadPort_Click);
             // 
             // lblTotalActive
             // 
             this.lblTotalActive.AutoSize = true;
-            this.lblTotalActive.Location = new System.Drawing.Point(7, 7);
+            this.lblTotalActive.Location = new System.Drawing.Point(11, 12);
             this.lblTotalActive.Name = "lblTotalActive";
             this.lblTotalActive.Size = new System.Drawing.Size(16, 17);
             this.lblTotalActive.TabIndex = 12;
             this.lblTotalActive.Text = "0";
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnConnect.Location = new System.Drawing.Point(7, 253);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(80, 30);
+            this.btnConnect.TabIndex = 11;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.lblStatusActive);
+            this.tabPage2.Controls.Add(this.btnLoadPortActive);
+            this.tabPage2.Controls.Add(this.chkCheckAll);
+            this.tabPage2.Controls.Add(this.btnStopActive);
+            this.tabPage2.Controls.Add(this.btnStartActive);
+            this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Controls.Add(this.lblTotalPortActive);
+            this.tabPage2.Controls.Add(this.dgvPortActive);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(916, 620);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Active";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // lblStatusActive
+            // 
+            this.lblStatusActive.AutoSize = true;
+            this.lblStatusActive.Location = new System.Drawing.Point(7, 446);
+            this.lblStatusActive.Name = "lblStatusActive";
+            this.lblStatusActive.Size = new System.Drawing.Size(0, 17);
+            this.lblStatusActive.TabIndex = 20;
+            // 
+            // btnLoadPortActive
+            // 
+            this.btnLoadPortActive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLoadPortActive.Location = new System.Drawing.Point(820, 446);
+            this.btnLoadPortActive.Name = "btnLoadPortActive";
+            this.btnLoadPortActive.Size = new System.Drawing.Size(88, 32);
+            this.btnLoadPortActive.TabIndex = 19;
+            this.btnLoadPortActive.Text = "Load Port";
+            this.btnLoadPortActive.UseVisualStyleBackColor = true;
+            this.btnLoadPortActive.Click += new System.EventHandler(this.btnLoadPortActive_Click);
+            // 
+            // chkCheckAll
+            // 
+            this.chkCheckAll.AutoSize = true;
+            this.chkCheckAll.Location = new System.Drawing.Point(9, 15);
+            this.chkCheckAll.Name = "chkCheckAll";
+            this.chkCheckAll.Size = new System.Drawing.Size(45, 21);
+            this.chkCheckAll.TabIndex = 18;
+            this.chkCheckAll.Text = "All";
+            this.chkCheckAll.UseVisualStyleBackColor = true;
+            this.chkCheckAll.CheckedChanged += new System.EventHandler(this.chkCheckAll_CheckedChanged);
+            // 
+            // btnStopActive
+            // 
+            this.btnStopActive.Image = ((System.Drawing.Image)(resources.GetObject("btnStopActive.Image")));
+            this.btnStopActive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnStopActive.Location = new System.Drawing.Point(463, 574);
+            this.btnStopActive.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStopActive.Name = "btnStopActive";
+            this.btnStopActive.Size = new System.Drawing.Size(85, 28);
+            this.btnStopActive.TabIndex = 17;
+            this.btnStopActive.Text = "Stop";
+            this.btnStopActive.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnStopActive.UseVisualStyleBackColor = true;
+            this.btnStopActive.Click += new System.EventHandler(this.btnStopActive_Click);
+            // 
+            // btnStartActive
+            // 
+            this.btnStartActive.Image = ((System.Drawing.Image)(resources.GetObject("btnStartActive.Image")));
+            this.btnStartActive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnStartActive.Location = new System.Drawing.Point(362, 574);
+            this.btnStartActive.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStartActive.Name = "btnStartActive";
+            this.btnStartActive.Size = new System.Drawing.Size(86, 28);
+            this.btnStartActive.TabIndex = 16;
+            this.btnStartActive.Text = "Start";
+            this.btnStartActive.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnStartActive.UseVisualStyleBackColor = true;
+            this.btnStartActive.Click += new System.EventHandler(this.btnStartActive_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.txtPassActive);
+            this.groupBox1.Location = new System.Drawing.Point(9, 495);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(904, 61);
+            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Transfer Money";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(11, 31);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(81, 17);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Password : ";
+            // 
+            // txtPassActive
+            // 
+            this.txtPassActive.Location = new System.Drawing.Point(98, 28);
+            this.txtPassActive.Name = "txtPassActive";
+            this.txtPassActive.Size = new System.Drawing.Size(100, 22);
+            this.txtPassActive.TabIndex = 6;
+            // 
+            // lblTotalPortActive
+            // 
+            this.lblTotalPortActive.AutoSize = true;
+            this.lblTotalPortActive.Location = new System.Drawing.Point(890, 16);
+            this.lblTotalPortActive.Name = "lblTotalPortActive";
+            this.lblTotalPortActive.Size = new System.Drawing.Size(16, 17);
+            this.lblTotalPortActive.TabIndex = 14;
+            this.lblTotalPortActive.Text = "0";
+            // 
+            // dgvPortActive
+            // 
+            this.dgvPortActive.AllowUserToAddRows = false;
+            this.dgvPortActive.AllowUserToDeleteRows = false;
+            this.dgvPortActive.AllowUserToResizeColumns = false;
+            this.dgvPortActive.AllowUserToResizeRows = false;
+            this.dgvPortActive.BackgroundColor = System.Drawing.Color.White;
+            this.dgvPortActive.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPortActive.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Process,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4,
+            this.Actived,
+            this.GetSMS,
+            this.ChangePass,
+            this.InforActive});
+            this.dgvPortActive.Location = new System.Drawing.Point(6, 37);
+            this.dgvPortActive.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvPortActive.Name = "dgvPortActive";
+            this.dgvPortActive.RowHeadersVisible = false;
+            this.dgvPortActive.Size = new System.Drawing.Size(904, 406);
+            this.dgvPortActive.TabIndex = 13;
+            // 
+            // Process
+            // 
+            this.Process.HeaderText = "";
+            this.Process.Name = "Process";
+            this.Process.ReadOnly = true;
+            this.Process.Width = 30;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Port";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Status";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.HeaderText = "Phone";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // Actived
+            // 
+            this.Actived.HeaderText = "Actived";
+            this.Actived.Name = "Actived";
+            this.Actived.ReadOnly = true;
+            this.Actived.Width = 80;
+            // 
+            // GetSMS
+            // 
+            this.GetSMS.HeaderText = "Get Password";
+            this.GetSMS.Name = "GetSMS";
+            this.GetSMS.ReadOnly = true;
+            this.GetSMS.Width = 150;
+            // 
+            // ChangePass
+            // 
+            this.ChangePass.HeaderText = "Change Password";
+            this.ChangePass.Name = "ChangePass";
+            this.ChangePass.ReadOnly = true;
+            this.ChangePass.Width = 150;
+            // 
+            // InforActive
+            // 
+            this.InforActive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.InforActive.HeaderText = "Infor";
+            this.InforActive.Name = "InforActive";
+            this.InforActive.ReadOnly = true;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(10, 699);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(920, 23);
+            this.progressBar1.TabIndex = 12;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(930, 692);
+            this.ClientSize = new System.Drawing.Size(930, 722);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.picLoading);
@@ -635,6 +859,11 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPortActive)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -692,6 +921,26 @@
         private System.Windows.Forms.RadioButton rbNone;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Label lblTotalActive;
+        private System.Windows.Forms.Button btnStopLoadPort;
+        private System.Windows.Forms.CheckBox chkAddPort;
+        private System.Windows.Forms.Label lblTotalPortActive;
+        private System.Windows.Forms.DataGridView dgvPortActive;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtPassActive;
+        private System.Windows.Forms.Button btnStopActive;
+        private System.Windows.Forms.Button btnStartActive;
+        private System.Windows.Forms.CheckBox chkCheckAll;
+        private System.Windows.Forms.Button btnLoadPortActive;
+        private System.Windows.Forms.Label lblStatusActive;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Process;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Actived;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GetSMS;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ChangePass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn InforActive;
     }
 }
 

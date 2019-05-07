@@ -19,6 +19,8 @@ namespace SMSAuto.Common
         public static string TITLE = "Auto Transfer Money";
         public static int FLAG_RECOVER = 0;
 
+        public static bool FLAG_PROCESS_LOADPORT = true;
+
         public static string STATUS_OK = "Ready";
         public static string STATUS_TIMEOUT = "Timeout";
         public static string STATUS_ERROR = "Error";
@@ -27,5 +29,9 @@ namespace SMSAuto.Common
         public static string COMMAND_BALANCE = "AT+CUSD=1,\"*101#\",15\r";
         public static string COMMAND_PHONE = "AT+CNUM\r";
         public static string COMMAND_TRANSFER = "AT+CUSD=1,\"*100*{0}*{1}*{2}#\",15\r";
+        public static string COMMAND_ACTIVE = "AT+CUSD=1,\"*000*1#\",15\r";
+        public static string COMMAND_GET_LIST_MESSAGES = "AT+CMGL\r";
+        public static string COMMAND_READ_MESSAGES = "AT+CMGR\r";
+        public static string COMMAND_CHNAGE_PASS = "AT+CUSD=1,\"*000*{0}*{1}#\",15\r";
     }
 }

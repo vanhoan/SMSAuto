@@ -34,7 +34,7 @@ namespace SMSAuto
         private bool FLAG_PROCESS = true;
         private string PASSWORD = "";
         private int LOOP = 3;
-
+        private bool FLAG_ADDPORT = true;
         private BackgroundWorker backgWorker = new BackgroundWorker();
 
         public FormMain()
@@ -124,11 +124,12 @@ namespace SMSAuto
             listPortActive = new List<ComPort>();
             if (listPo.Length > 0)
             {
-                ChangeUI(() => btnLoadPort.Enabled = false);
                 ChangeUI(() => gbSend.Enabled = false);
                 ChangeUI(() => gbReceive.Enabled = false);
                 ChangeUI(() => btnConnect.Enabled = false);
                 ChangeUI(() => lblTotalActive.Text = listPortActive.Count.ToString());
+                ChangeUI(() => btnLoadPort.Hide());
+                ChangeUI(() => btnStopLoadPort.Show());
             }
             int index = 0;
             dgvPort.Rows.Clear();
@@ -136,17 +137,32 @@ namespace SMSAuto
             dgvReceive.Rows.Clear();
             foreach (string item in listPo)
             {
+                if (!Constant.FLAG_PROCESS_LOADPORT)
+                {
+                    break;
+                }
                 Thread t = new Thread(
                 () =>
                 {
                     try
                     {
                         ComPort port = GetPortInfor(item);
+                        if (FLAG_ADDPORT && port.Status.Equals(Constant.STATUS_OK))
+                        {
+                            if(port.Money >= 10)
+                            {
+                                AddRowToGridViewTransfer(port, dgvSend);
+                            }
+                            else
+                            {
+                                AddRowToGridViewTransfer(port, dgvReceive);
+                            }
+                        }
                         AddRowToGridView(port);                     
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        Console.Write(e.Message);
+                        
                     }
                     finally
                     {
@@ -155,10 +171,53 @@ namespace SMSAuto
                         {
                             ChangeUI(() => gbSend.Enabled = true);
                             ChangeUI(() => gbReceive.Enabled = true);
-                            ChangeUI(() => btnLoadPort.Enabled = true);
+                            ChangeUI(() => btnLoadPort.Show());
+                            ChangeUI(() => btnStopLoadPort.Hide());
                             SetDataComBoBox();
                         }
                         ChangeUI(() => lblTotalActive.Text = listPortActive.Count.ToString());
+                    }
+                });
+                t.Start();
+            }
+        }
+        private void GetSerialPortsActive()
+        {
+            listPort = new List<ComPort>();
+            string[] listPo = System.IO.Ports.SerialPort.GetPortNames();
+            listPortActive = new List<ComPort>();
+            if (listPo.Length > 0)
+            {
+                ChangeUI(() => btnLoadPortActive.Enabled = false);
+            }
+            int index = 0;
+            dgvPortActive.Rows.Clear();
+            foreach (string item in listPo)
+            {
+                Thread t = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        ComPort port = CheckingConnect(item);
+                        if (port.Status.Equals(Constant.STATUS_OK))
+                        {
+                            AddRowToGridViewActive(port,true);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    finally
+                    {
+                        index++;
+                        if (index == listPo.Length - 1)
+                        {
+                            ChangeUI(() => btnLoadPortActive.Enabled = true);
+                            SetDataComBoBox();
+                        }
+                        ChangeUI(() => lblTotalPortActive.Text = listPortActive.Count.ToString());
                     }
                 });
                 t.Start();
@@ -190,10 +249,9 @@ namespace SMSAuto
             int loop = 0;
             while (!c.Status.Equals(Constant.STATUS_OK))
             {
-                if (loop == LOOP)
+                if (loop == LOOP || !Constant.FLAG_PROCESS_LOADPORT)
                 {
-                    Utils.WriteFileLog(port + " : Process checkbance is failed");
-                    break;
+                    return c;
                 }
                 reponse = action.CheckBanlce(port);
                 c.Status = Utils.GetStatus(reponse);
@@ -206,10 +264,9 @@ namespace SMSAuto
                 loop = 0;
                 while (string.IsNullOrEmpty(c.Phone))
                 {
-                    if (loop == LOOP)
+                    if (loop == LOOP || !Constant.FLAG_PROCESS_LOADPORT)
                     {
-                        Utils.WriteFileLog("Can't get phone number");
-                        break;
+                        return c;
                     }
                     c.Phone = action.GetPhoneNumber(port);
                     loop++;
@@ -266,39 +323,87 @@ namespace SMSAuto
 
         private void AddRowToGridView(ComPort gmail)
         {
-            DataGridViewTextBoxCell userCell = new DataGridViewTextBoxCell();
-            userCell.Value = gmail.Name;
-            DataGridViewTextBoxCell userStatus = new DataGridViewTextBoxCell();
-            userStatus.Value = gmail.Status;
-            DataGridViewTextBoxCell userPhone = new DataGridViewTextBoxCell();
-            userPhone.Value = gmail.Phone;
-            DataGridViewTextBoxCell userInfor= new DataGridViewTextBoxCell();
-            userInfor.Value = gmail.Description;
-
-            DataGridViewRow newRow = new DataGridViewRow();
-            newRow.Cells.AddRange(userCell, userStatus, userPhone, userInfor);
-            if (gmail.Status.Equals(Constant.STATUS_OK))
+            try
             {
-                newRow.DefaultCellStyle.BackColor = Color.LightGreen;
+                DataGridViewTextBoxCell userCell = new DataGridViewTextBoxCell();
+                userCell.Value = gmail.Name;
+                DataGridViewTextBoxCell userStatus = new DataGridViewTextBoxCell();
+                userStatus.Value = gmail.Status;
+                DataGridViewTextBoxCell userPhone = new DataGridViewTextBoxCell();
+                userPhone.Value = gmail.Phone;
+                DataGridViewTextBoxCell userInfor = new DataGridViewTextBoxCell();
+                userInfor.Value = gmail.Description;
+
+                DataGridViewRow newRow = new DataGridViewRow();
+                newRow.Cells.AddRange(userCell, userStatus, userPhone, userInfor);
+                if (gmail.Status.Equals(Constant.STATUS_OK))
+                {
+                    newRow.DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                ChangeUI(() => dgvPort.Rows.Add(newRow));
             }
-            ChangeUI(() => dgvPort.Rows.Add(newRow));        
+            catch (Exception)
+            {
+                
+            }
+                
+        }
+
+        private void AddRowToGridViewActive(ComPort gmail, bool process)
+        {
+            try
+            {
+                DataGridViewCheckBoxCell processCell = new DataGridViewCheckBoxCell();
+                processCell.Value = process;
+                DataGridViewTextBoxCell userCell = new DataGridViewTextBoxCell();
+                userCell.Value = gmail.Name;
+                DataGridViewTextBoxCell userStatus = new DataGridViewTextBoxCell();
+                userStatus.Value = gmail.Status;
+                DataGridViewTextBoxCell userPhone = new DataGridViewTextBoxCell();
+                userPhone.Value = gmail.Phone;
+                DataGridViewTextBoxCell userActive = new DataGridViewTextBoxCell();
+                userActive.Value = "";
+                DataGridViewTextBoxCell cellGetPass = new DataGridViewTextBoxCell();
+                cellGetPass.Value = "";
+                DataGridViewTextBoxCell cellChangePass = new DataGridViewTextBoxCell();
+                cellChangePass.Value = "";
+                DataGridViewTextBoxCell cellInfo = new DataGridViewTextBoxCell();
+                cellInfo.Value = "";
+
+                DataGridViewRow newRow = new DataGridViewRow();
+                newRow.Cells.AddRange(userCell, userStatus, userPhone, userActive, cellGetPass, cellChangePass, cellInfo);
+                ChangeUI(() => dgvPortActive.Rows.Add(newRow));
+            }
+            catch (Exception)
+            {
+               
+            }
+
         }
         private void AddRowToGridViewTransfer(ComPort port, DataGridView dgv)
         {
-            int row = dgv.RowCount;
-            DataGridViewTextBoxCell userRow = new DataGridViewTextBoxCell();
-            userRow.Value = row+1;
-            DataGridViewTextBoxCell userCell = new DataGridViewTextBoxCell();
-            userCell.Value = port.Name;
-            DataGridViewTextBoxCell userPhone = new DataGridViewTextBoxCell();
-            userPhone.Value = port.Phone;
-            DataGridViewTextBoxCell userMoney = new DataGridViewTextBoxCell();
-            userMoney.Value = port.Money;
+            try
+            {
+                int row = dgv.RowCount;
+                DataGridViewTextBoxCell userRow = new DataGridViewTextBoxCell();
+                userRow.Value = row + 1;
+                DataGridViewTextBoxCell userCell = new DataGridViewTextBoxCell();
+                userCell.Value = port.Name;
+                DataGridViewTextBoxCell userPhone = new DataGridViewTextBoxCell();
+                userPhone.Value = port.Phone;
+                DataGridViewTextBoxCell userMoney = new DataGridViewTextBoxCell();
+                userMoney.Value = port.Money;
 
-            DataGridViewRow newRow = new DataGridViewRow();
-            newRow.Cells.AddRange(userRow, userCell, userPhone, userMoney);
+                DataGridViewRow newRow = new DataGridViewRow();
+                newRow.Cells.AddRange(userRow, userCell, userPhone, userMoney);
+
+                ChangeUI(() => dgv.Rows.Add(newRow));
+            }
+            catch (Exception)
+            {
+
+            }
             
-            ChangeUI(() => dgv.Rows.Add(newRow));
         }
         private ComPort GetPortFromList(string portName)
         {            
@@ -367,10 +472,31 @@ namespace SMSAuto
             }
         }
 
+        private void ReloadValueCellDataGridViewActive(DataGridView dgv, int rowindex, int cellindex, string value)
+        {
+            try
+            {
+                ChangeUI(()=> dgv[cellindex, rowindex].Value = value);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         private void btnLoadPort_Click(object sender, EventArgs e)
         {
+            FLAG_ADDPORT = chkAddPort.Checked;
+            Constant.FLAG_PROCESS_LOADPORT = true;
             GetSerialPorts();
         }
+        private void btnStopLoadPort_Click(object sender, EventArgs e)
+        {
+            Constant.FLAG_PROCESS_LOADPORT = false;
+            ChangeUI(() => btnLoadPort.Show());
+            ChangeUI(() => btnStopLoadPort.Hide());
+        }
+
         private void btnConnect_Click(object sender, EventArgs e)
         {
 
@@ -412,6 +538,7 @@ namespace SMSAuto
                             ChangeUI(() => gbSend.Enabled = true);
                             ChangeUI(() => gbReceive.Enabled = true);
                             ChangeUI(() => btnLoadPort.Enabled = true);
+                            ChangeUI(() => btnConnect.Enabled = true);
                             SetDataComBoBox();
                         }
                         ChangeUI(() => lblTotalActive.Text = listPortActive.Count.ToString());
@@ -669,8 +796,36 @@ namespace SMSAuto
         }
 
 
+
+
+
         #endregion process
 
-       
+        #region Active
+        private void btnLoadPortActive_Click(object sender, EventArgs e)
+        {
+            Constant.FLAG_PROCESS_LOADPORT = true;
+            GetSerialPortsActive();
+        }
+
+        private void chkCheckAll_CheckedChanged(object sender, EventArgs e)
+        {
+            bool flag = chkCheckAll.Checked;
+            foreach (DataGridViewRow row in dgvPortActive.Rows)
+            {
+                ChangeUI(() => row.Cells[0].Value = flag);
+            }
+        }
+
+        private void btnStartActive_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnStopActive_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion Active
     }
 }
