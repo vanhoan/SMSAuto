@@ -220,9 +220,9 @@ namespace SMSAuto
             {
                 c.Phone = action.GetPhoneNumber(port);
             }
-            c.Currency = Utils.GetCurrency(reponse);
-            c.Money = Utils.GetMoney(reponse);
-            if (!string.IsNullOrEmpty(reponse))
+            //c.Currency = Utils.GetCurrency(reponse);
+            //c.Money = Utils.GetMoney(reponse);
+            if (!string.IsNullOrEmpty(reponse) && !string.IsNullOrEmpty(c.Phone))
             {
                 reponse = reponse.Replace(c.Phone, "");
             }
