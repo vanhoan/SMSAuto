@@ -74,7 +74,7 @@ namespace SMSAuto.Action
             bool isReading = true;
             while (isReading)
             {
-                if (i == 5)
+                if (i == 3)
                 {
                     break;
                 }
@@ -133,7 +133,11 @@ namespace SMSAuto.Action
                     if (match.Success)
                     {
                         isReading = false;
-                        ss = match.Value.Replace("855", "0");
+                        string value = match.Value;
+                        string frist = value.Substring(0, 3);
+                        string last = value.Substring(3, value.Length - frist.Length);
+                        frist = frist.Replace("855", "0");
+                        ss = frist + last;
                     }
                     else
                     {

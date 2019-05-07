@@ -33,6 +33,8 @@ namespace SMSAuto
         private int count = 0;
         private bool FLAG_PROCESS = true;
         private string PASSWORD = "";
+        private int LOOP = 3;
+
         private BackgroundWorker backgWorker = new BackgroundWorker();
 
         public FormMain()
@@ -57,6 +59,12 @@ namespace SMSAuto
                 try
                 {
                     check = active.checkActive();
+                    string loop = Utils.ReadFile(Constant.PATH_FILE_LOOP);
+
+                    if (!string.IsNullOrEmpty(loop))
+                    {
+                        LOOP = int.Parse(loop);
+                    }
                 }
                 catch (Exception)
                 {
@@ -113,12 +121,14 @@ namespace SMSAuto
         {
             listPort = new List<ComPort>();
             string[] listPo = System.IO.Ports.SerialPort.GetPortNames();
+            listPortActive = new List<ComPort>();
             if (listPo.Length > 0)
             {
                 ChangeUI(() => btnLoadPort.Enabled = false);
                 ChangeUI(() => gbSend.Enabled = false);
                 ChangeUI(() => gbReceive.Enabled = false);
                 ChangeUI(() => btnConnect.Enabled = false);
+                ChangeUI(() => lblTotalActive.Text = listPortActive.Count.ToString());
             }
             int index = 0;
             dgvPort.Rows.Clear();
@@ -177,33 +187,51 @@ namespace SMSAuto
             ATAction action = new ATAction();
             string reponse = action.CheckBanlce(port);
             c.Status = Utils.GetStatus(reponse);
+            int loop = 0;
+            while (!c.Status.Equals(Constant.STATUS_OK))
+            {
+                if (loop == LOOP)
+                {
+                    Utils.WriteFileLog(port + " : Process checkbance is failed");
+                    break;
+                }
+                reponse = action.CheckBanlce(port);
+                c.Status = Utils.GetStatus(reponse);
+                loop++;
+            }
+
             c.Phone = Utils.GetPhone(reponse);
             if (c.Status.Equals(Constant.STATUS_OK) && string.IsNullOrEmpty(c.Phone))
             {
-                 c.Phone = action.GetPhoneNumber(port);
+                loop = 0;
+                while (string.IsNullOrEmpty(c.Phone))
+                {
+                    if (loop == LOOP)
+                    {
+                        Utils.WriteFileLog("Can't get phone number");
+                        break;
+                    }
+                    c.Phone = action.GetPhoneNumber(port);
+                    loop++;
+                }  
             }
             c.Currency = Utils.GetCurrency(reponse);
-            c.Money = Utils.GetMoney(reponse);
-            if (!string.IsNullOrEmpty(reponse))
-            {
-                reponse = reponse.Replace(c.Phone, "");
-            }
-            
+            c.Money = Utils.GetMoney(reponse);                       
             c.Description = Utils.GetDescription(reponse);
             listPort.Add(c);
             if (c.Status.Equals(Constant.STATUS_OK))
             {
                 listPortActive.Add(c);
             }
-                return c;
+            return c;
         }
+
         private ComPort CheckingConnect(string port)
         {
             ComPort c = new ComPort();
             c.Name = port;
             ATAction action = new ATAction();
             string reponse = action.CheckConnect(port);
-            c.Status = Utils.GetStatus(reponse);
             if (reponse.IndexOf("OK") >= 0)
             {
                 c.Status = Constant.STATUS_OK;
@@ -348,12 +376,14 @@ namespace SMSAuto
 
             listPort = new List<ComPort>();
             string[] listPo = System.IO.Ports.SerialPort.GetPortNames();
+            listPortActive = new List<ComPort>();
             if(listPo.Length > 0)
             {
                 ChangeUI(() => btnLoadPort.Enabled = false);
                 ChangeUI(() => gbSend.Enabled = false);
                 ChangeUI(() => gbReceive.Enabled = false);
                 ChangeUI(() => btnConnect.Enabled = false);
+                ChangeUI(() => lblTotalActive.Text = listPortActive.Count.ToString());
             }
 
             int index = 0;

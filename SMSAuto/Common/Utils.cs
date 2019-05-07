@@ -229,18 +229,17 @@ namespace SMSAuto.Common
             }
             else
             {
-                Utils.WriteFileLog(reponse);
                 return Constant.STATUS_TIMEOUT;
             }
         }
         public static string GetDescription(string reponse)
         {
           
-            reponse = reponse.Replace("OK","");
-            reponse = reponse.Replace("+", "");
-            reponse = reponse.Replace("ATCUSD=1,\"*101#\",15\r", "");
-            reponse = reponse.Replace("AT+CUSD=1,\"*101#\",15\r", "");
-            reponse = reponse.Replace("CUSD: 2", "");
+            //reponse = reponse.Replace("OK","");
+            //reponse = reponse.Replace("+", "");
+            //reponse = reponse.Replace("ATCUSD=1,\"*101#\",15\r", "");
+            //reponse = reponse.Replace("AT+CUSD=1,\"*101#\",15\r", "");
+            //reponse = reponse.Replace("CUSD: 2", "");
             return reponse;
            
         }
@@ -254,7 +253,11 @@ namespace SMSAuto.Common
             Match match = regex.Match(reponse);
             if (match.Success)
             {
-                return match.Value.Replace("855","0");
+                string value = match.Value;
+                string frist = value.Substring(0, 3);
+                string last = value.Substring(3, value.Length - frist.Length);
+                frist = frist.Replace("855", "0");
+                return frist+last;
             }
             else
             {
