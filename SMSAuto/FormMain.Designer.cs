@@ -80,6 +80,7 @@
             this.lblTotalActive = new System.Windows.Forms.Label();
             this.btnConnect = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lblRunningActive = new System.Windows.Forms.Label();
             this.lblStatusActive = new System.Windows.Forms.Label();
             this.btnLoadPortActive = new System.Windows.Forms.Button();
             this.chkCheckAll = new System.Windows.Forms.CheckBox();
@@ -90,6 +91,7 @@
             this.txtPassActive = new System.Windows.Forms.TextBox();
             this.lblTotalPortActive = new System.Windows.Forms.Label();
             this.dgvPortActive = new System.Windows.Forms.DataGridView();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.Process = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -98,7 +100,6 @@
             this.GetSMS = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ChangePass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.InforActive = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -118,10 +119,9 @@
             // 
             this.btnStart.Image = ((System.Drawing.Image)(resources.GetObject("btnStart.Image")));
             this.btnStart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnStart.Location = new System.Drawing.Point(372, 591);
-            this.btnStart.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStart.Location = new System.Drawing.Point(279, 480);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(86, 28);
+            this.btnStart.Size = new System.Drawing.Size(64, 23);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "Start";
             this.btnStart.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -141,11 +141,10 @@
             this.Status,
             this.PhoneTransfer,
             this.Infor});
-            this.dgvPort.Location = new System.Drawing.Point(7, 33);
-            this.dgvPort.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvPort.Location = new System.Drawing.Point(5, 27);
             this.dgvPort.Name = "dgvPort";
             this.dgvPort.RowHeadersVisible = false;
-            this.dgvPort.Size = new System.Drawing.Size(904, 220);
+            this.dgvPort.Size = new System.Drawing.Size(678, 179);
             this.dgvPort.TabIndex = 1;
             // 
             // Port
@@ -178,28 +177,27 @@
             // lblRunning
             // 
             this.lblRunning.AutoSize = true;
-            this.lblRunning.Location = new System.Drawing.Point(14, 569);
-            this.lblRunning.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblRunning.Location = new System.Drawing.Point(10, 462);
             this.lblRunning.Name = "lblRunning";
-            this.lblRunning.Size = new System.Drawing.Size(73, 17);
+            this.lblRunning.Size = new System.Drawing.Size(56, 13);
             this.lblRunning.TabIndex = 2;
             this.lblRunning.Text = "Running : ";
             // 
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(18, 602);
-            this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblStatus.Location = new System.Drawing.Point(14, 489);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(0, 17);
+            this.lblStatus.Size = new System.Drawing.Size(0, 13);
             this.lblStatus.TabIndex = 3;
             // 
             // btnLoadPort
             // 
             this.btnLoadPort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLoadPort.Location = new System.Drawing.Point(124, 253);
+            this.btnLoadPort.Location = new System.Drawing.Point(93, 206);
+            this.btnLoadPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnLoadPort.Name = "btnLoadPort";
-            this.btnLoadPort.Size = new System.Drawing.Size(88, 32);
+            this.btnLoadPort.Size = new System.Drawing.Size(66, 26);
             this.btnLoadPort.TabIndex = 4;
             this.btnLoadPort.Text = "Load Port";
             this.btnLoadPort.UseVisualStyleBackColor = true;
@@ -207,9 +205,10 @@
             // 
             // picLoading
             // 
-            this.picLoading.Location = new System.Drawing.Point(824, 0);
+            this.picLoading.Location = new System.Drawing.Point(618, 0);
+            this.picLoading.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.picLoading.Name = "picLoading";
-            this.picLoading.Size = new System.Drawing.Size(100, 28);
+            this.picLoading.Size = new System.Drawing.Size(75, 23);
             this.picLoading.TabIndex = 6;
             this.picLoading.TabStop = false;
             // 
@@ -222,20 +221,21 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(930, 28);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(698, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // optionToolStripMenuItem
             // 
             this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
-            this.optionToolStripMenuItem.Size = new System.Drawing.Size(67, 24);
+            this.optionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.optionToolStripMenuItem.Text = "Option";
             // 
             // helpToolStripMenuItem
@@ -243,13 +243,13 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             // 
             // gbSend
@@ -260,9 +260,11 @@
             this.gbSend.Controls.Add(this.dgvSend);
             this.gbSend.Controls.Add(this.label2);
             this.gbSend.Controls.Add(this.cbPortSend);
-            this.gbSend.Location = new System.Drawing.Point(7, 352);
+            this.gbSend.Location = new System.Drawing.Point(5, 286);
+            this.gbSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gbSend.Name = "gbSend";
-            this.gbSend.Size = new System.Drawing.Size(451, 213);
+            this.gbSend.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbSend.Size = new System.Drawing.Size(338, 173);
             this.gbSend.TabIndex = 8;
             this.gbSend.TabStop = false;
             this.gbSend.Text = "Send Money";
@@ -271,9 +273,10 @@
             // 
             this.btnClearSend.Image = ((System.Drawing.Image)(resources.GetObject("btnClearSend.Image")));
             this.btnClearSend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearSend.Location = new System.Drawing.Point(417, 182);
+            this.btnClearSend.Location = new System.Drawing.Point(313, 148);
+            this.btnClearSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnClearSend.Name = "btnClearSend";
-            this.btnClearSend.Size = new System.Drawing.Size(28, 26);
+            this.btnClearSend.Size = new System.Drawing.Size(21, 21);
             this.btnClearSend.TabIndex = 7;
             this.btnClearSend.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnClearSend.UseVisualStyleBackColor = true;
@@ -283,9 +286,10 @@
             // 
             this.btnDeleteSend.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteSend.Image")));
             this.btnDeleteSend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDeleteSend.Location = new System.Drawing.Point(417, 154);
+            this.btnDeleteSend.Location = new System.Drawing.Point(313, 125);
+            this.btnDeleteSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnDeleteSend.Name = "btnDeleteSend";
-            this.btnDeleteSend.Size = new System.Drawing.Size(28, 26);
+            this.btnDeleteSend.Size = new System.Drawing.Size(21, 21);
             this.btnDeleteSend.TabIndex = 6;
             this.btnDeleteSend.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnDeleteSend.UseVisualStyleBackColor = true;
@@ -295,9 +299,10 @@
             // 
             this.btnAddSend.Image = ((System.Drawing.Image)(resources.GetObject("btnAddSend.Image")));
             this.btnAddSend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddSend.Location = new System.Drawing.Point(195, 29);
+            this.btnAddSend.Location = new System.Drawing.Point(146, 24);
+            this.btnAddSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAddSend.Name = "btnAddSend";
-            this.btnAddSend.Size = new System.Drawing.Size(76, 25);
+            this.btnAddSend.Size = new System.Drawing.Size(57, 20);
             this.btnAddSend.TabIndex = 5;
             this.btnAddSend.Text = "Add";
             this.btnAddSend.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -315,11 +320,12 @@
             this.Phone,
             this.Money,
             this.StatusSend});
-            this.dgvSend.Location = new System.Drawing.Point(9, 63);
+            this.dgvSend.Location = new System.Drawing.Point(7, 51);
+            this.dgvSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvSend.Name = "dgvSend";
             this.dgvSend.RowHeadersVisible = false;
             this.dgvSend.RowTemplate.Height = 24;
-            this.dgvSend.Size = new System.Drawing.Size(402, 144);
+            this.dgvSend.Size = new System.Drawing.Size(302, 117);
             this.dgvSend.TabIndex = 4;
             // 
             // No
@@ -358,9 +364,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 33);
+            this.label2.Location = new System.Drawing.Point(4, 27);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 17);
+            this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Port : ";
             // 
@@ -368,26 +375,29 @@
             // 
             this.cbPortSend.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPortSend.FormattingEnabled = true;
-            this.cbPortSend.Location = new System.Drawing.Point(68, 30);
+            this.cbPortSend.Location = new System.Drawing.Point(51, 24);
+            this.cbPortSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbPortSend.Name = "cbPortSend";
-            this.cbPortSend.Size = new System.Drawing.Size(121, 24);
+            this.cbPortSend.Size = new System.Drawing.Size(92, 21);
             this.cbPortSend.TabIndex = 1;
             // 
             // cbPortReceive
             // 
             this.cbPortReceive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPortReceive.FormattingEnabled = true;
-            this.cbPortReceive.Location = new System.Drawing.Point(69, 27);
+            this.cbPortReceive.Location = new System.Drawing.Point(52, 22);
+            this.cbPortReceive.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbPortReceive.Name = "cbPortReceive";
-            this.cbPortReceive.Size = new System.Drawing.Size(121, 24);
+            this.cbPortReceive.Size = new System.Drawing.Size(92, 21);
             this.cbPortReceive.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 30);
+            this.label1.Location = new System.Drawing.Point(4, 24);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 17);
+            this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Port : ";
             // 
@@ -399,9 +409,11 @@
             this.gbReceive.Controls.Add(this.dgvReceive);
             this.gbReceive.Controls.Add(this.label1);
             this.gbReceive.Controls.Add(this.cbPortReceive);
-            this.gbReceive.Location = new System.Drawing.Point(464, 353);
+            this.gbReceive.Location = new System.Drawing.Point(348, 287);
+            this.gbReceive.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gbReceive.Name = "gbReceive";
-            this.gbReceive.Size = new System.Drawing.Size(447, 212);
+            this.gbReceive.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbReceive.Size = new System.Drawing.Size(335, 172);
             this.gbReceive.TabIndex = 3;
             this.gbReceive.TabStop = false;
             this.gbReceive.Text = "Receive Money";
@@ -410,9 +422,10 @@
             // 
             this.btnClearRe.Image = ((System.Drawing.Image)(resources.GetObject("btnClearRe.Image")));
             this.btnClearRe.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearRe.Location = new System.Drawing.Point(415, 179);
+            this.btnClearRe.Location = new System.Drawing.Point(311, 145);
+            this.btnClearRe.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnClearRe.Name = "btnClearRe";
-            this.btnClearRe.Size = new System.Drawing.Size(29, 26);
+            this.btnClearRe.Size = new System.Drawing.Size(22, 21);
             this.btnClearRe.TabIndex = 8;
             this.btnClearRe.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnClearRe.UseVisualStyleBackColor = true;
@@ -422,9 +435,10 @@
             // 
             this.btnDeleteRe.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteRe.Image")));
             this.btnDeleteRe.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDeleteRe.Location = new System.Drawing.Point(415, 153);
+            this.btnDeleteRe.Location = new System.Drawing.Point(311, 124);
+            this.btnDeleteRe.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnDeleteRe.Name = "btnDeleteRe";
-            this.btnDeleteRe.Size = new System.Drawing.Size(29, 26);
+            this.btnDeleteRe.Size = new System.Drawing.Size(22, 21);
             this.btnDeleteRe.TabIndex = 7;
             this.btnDeleteRe.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnDeleteRe.UseVisualStyleBackColor = true;
@@ -434,9 +448,10 @@
             // 
             this.btnAddReceive.Image = ((System.Drawing.Image)(resources.GetObject("btnAddReceive.Image")));
             this.btnAddReceive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddReceive.Location = new System.Drawing.Point(196, 26);
+            this.btnAddReceive.Location = new System.Drawing.Point(147, 21);
+            this.btnAddReceive.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAddReceive.Name = "btnAddReceive";
-            this.btnAddReceive.Size = new System.Drawing.Size(76, 27);
+            this.btnAddReceive.Size = new System.Drawing.Size(57, 22);
             this.btnAddReceive.TabIndex = 6;
             this.btnAddReceive.Text = "Add";
             this.btnAddReceive.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -453,11 +468,12 @@
             this.PortReceive,
             this.PhoneRe,
             this.MoneyRe});
-            this.dgvReceive.Location = new System.Drawing.Point(9, 60);
+            this.dgvReceive.Location = new System.Drawing.Point(7, 49);
+            this.dgvReceive.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvReceive.Name = "dgvReceive";
             this.dgvReceive.RowHeadersVisible = false;
             this.dgvReceive.RowTemplate.Height = 24;
-            this.dgvReceive.Size = new System.Drawing.Size(400, 144);
+            this.dgvReceive.Size = new System.Drawing.Size(300, 117);
             this.dgvReceive.TabIndex = 5;
             // 
             // dataGridViewTextBoxColumn1
@@ -492,9 +508,11 @@
             this.groupBox3.Controls.Add(this.rbNone);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.txtPassword);
-            this.groupBox3.Location = new System.Drawing.Point(6, 289);
+            this.groupBox3.Location = new System.Drawing.Point(4, 235);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(904, 61);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Size = new System.Drawing.Size(678, 50);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Transfer Money";
@@ -502,9 +520,10 @@
             // rbLastConfig
             // 
             this.rbLastConfig.AutoSize = true;
-            this.rbLastConfig.Location = new System.Drawing.Point(791, 21);
+            this.rbLastConfig.Location = new System.Drawing.Point(593, 17);
+            this.rbLastConfig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbLastConfig.Name = "rbLastConfig";
-            this.rbLastConfig.Size = new System.Drawing.Size(98, 21);
+            this.rbLastConfig.Size = new System.Drawing.Size(77, 17);
             this.rbLastConfig.TabIndex = 9;
             this.rbLastConfig.Text = "Last config";
             this.rbLastConfig.UseVisualStyleBackColor = true;
@@ -514,9 +533,10 @@
             // 
             this.rbNone.AutoSize = true;
             this.rbNone.Checked = true;
-            this.rbNone.Location = new System.Drawing.Point(713, 21);
+            this.rbNone.Location = new System.Drawing.Point(535, 17);
+            this.rbNone.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbNone.Name = "rbNone";
-            this.rbNone.Size = new System.Drawing.Size(63, 21);
+            this.rbNone.Size = new System.Drawing.Size(51, 17);
             this.rbNone.TabIndex = 8;
             this.rbNone.TabStop = true;
             this.rbNone.Text = "None";
@@ -526,27 +546,28 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(11, 31);
+            this.label4.Location = new System.Drawing.Point(8, 25);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(81, 17);
+            this.label4.Size = new System.Drawing.Size(62, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Password : ";
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(98, 28);
+            this.txtPassword.Location = new System.Drawing.Point(74, 23);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(100, 22);
+            this.txtPassword.Size = new System.Drawing.Size(76, 20);
             this.txtPassword.TabIndex = 6;
             // 
             // btnStop
             // 
             this.btnStop.Image = ((System.Drawing.Image)(resources.GetObject("btnStop.Image")));
             this.btnStop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnStop.Location = new System.Drawing.Point(473, 591);
-            this.btnStop.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStop.Location = new System.Drawing.Point(355, 480);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(85, 28);
+            this.btnStop.Size = new System.Drawing.Size(64, 23);
             this.btnStop.TabIndex = 10;
             this.btnStop.Text = "Stop";
             this.btnStop.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -557,10 +578,11 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(3, 44);
+            this.tabControl1.Location = new System.Drawing.Point(2, 36);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(924, 649);
+            this.tabControl1.Size = new System.Drawing.Size(693, 527);
             this.tabControl1.TabIndex = 11;
             // 
             // tabPage1
@@ -578,10 +600,11 @@
             this.tabPage1.Controls.Add(this.lblStatus);
             this.tabPage1.Controls.Add(this.gbSend);
             this.tabPage1.Controls.Add(this.btnLoadPort);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(916, 620);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Size = new System.Drawing.Size(685, 501);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Transfer Money";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -591,9 +614,10 @@
             this.chkAddPort.AutoSize = true;
             this.chkAddPort.Checked = true;
             this.chkAddPort.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAddPort.Location = new System.Drawing.Point(257, 259);
+            this.chkAddPort.Location = new System.Drawing.Point(193, 210);
+            this.chkAddPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chkAddPort.Name = "chkAddPort";
-            this.chkAddPort.Size = new System.Drawing.Size(143, 21);
+            this.chkAddPort.Size = new System.Drawing.Size(109, 17);
             this.chkAddPort.TabIndex = 14;
             this.chkAddPort.Text = "Add Port Transfer";
             this.chkAddPort.UseVisualStyleBackColor = true;
@@ -601,9 +625,10 @@
             // btnStopLoadPort
             // 
             this.btnStopLoadPort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnStopLoadPort.Location = new System.Drawing.Point(124, 253);
+            this.btnStopLoadPort.Location = new System.Drawing.Point(93, 206);
+            this.btnStopLoadPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnStopLoadPort.Name = "btnStopLoadPort";
-            this.btnStopLoadPort.Size = new System.Drawing.Size(62, 32);
+            this.btnStopLoadPort.Size = new System.Drawing.Size(46, 26);
             this.btnStopLoadPort.TabIndex = 13;
             this.btnStopLoadPort.Text = "Stop";
             this.btnStopLoadPort.UseVisualStyleBackColor = true;
@@ -613,18 +638,20 @@
             // lblTotalActive
             // 
             this.lblTotalActive.AutoSize = true;
-            this.lblTotalActive.Location = new System.Drawing.Point(11, 12);
+            this.lblTotalActive.Location = new System.Drawing.Point(8, 10);
+            this.lblTotalActive.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTotalActive.Name = "lblTotalActive";
-            this.lblTotalActive.Size = new System.Drawing.Size(16, 17);
+            this.lblTotalActive.Size = new System.Drawing.Size(13, 13);
             this.lblTotalActive.TabIndex = 12;
             this.lblTotalActive.Text = "0";
             // 
             // btnConnect
             // 
             this.btnConnect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnConnect.Location = new System.Drawing.Point(7, 253);
+            this.btnConnect.Location = new System.Drawing.Point(5, 206);
+            this.btnConnect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(80, 30);
+            this.btnConnect.Size = new System.Drawing.Size(60, 24);
             this.btnConnect.TabIndex = 11;
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -632,6 +659,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.lblRunningActive);
             this.tabPage2.Controls.Add(this.lblStatusActive);
             this.tabPage2.Controls.Add(this.btnLoadPortActive);
             this.tabPage2.Controls.Add(this.chkCheckAll);
@@ -640,28 +668,41 @@
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.lblTotalPortActive);
             this.tabPage2.Controls.Add(this.dgvPortActive);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(916, 620);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Size = new System.Drawing.Size(685, 501);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Active";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // lblRunningActive
+            // 
+            this.lblRunningActive.AutoSize = true;
+            this.lblRunningActive.Location = new System.Drawing.Point(8, 366);
+            this.lblRunningActive.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblRunningActive.Name = "lblRunningActive";
+            this.lblRunningActive.Size = new System.Drawing.Size(56, 13);
+            this.lblRunningActive.TabIndex = 21;
+            this.lblRunningActive.Text = "Running : ";
+            // 
             // lblStatusActive
             // 
             this.lblStatusActive.AutoSize = true;
-            this.lblStatusActive.Location = new System.Drawing.Point(7, 446);
+            this.lblStatusActive.Location = new System.Drawing.Point(5, 362);
+            this.lblStatusActive.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblStatusActive.Name = "lblStatusActive";
-            this.lblStatusActive.Size = new System.Drawing.Size(0, 17);
+            this.lblStatusActive.Size = new System.Drawing.Size(0, 13);
             this.lblStatusActive.TabIndex = 20;
             // 
             // btnLoadPortActive
             // 
             this.btnLoadPortActive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLoadPortActive.Location = new System.Drawing.Point(820, 446);
+            this.btnLoadPortActive.Location = new System.Drawing.Point(615, 362);
+            this.btnLoadPortActive.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnLoadPortActive.Name = "btnLoadPortActive";
-            this.btnLoadPortActive.Size = new System.Drawing.Size(88, 32);
+            this.btnLoadPortActive.Size = new System.Drawing.Size(66, 26);
             this.btnLoadPortActive.TabIndex = 19;
             this.btnLoadPortActive.Text = "Load Port";
             this.btnLoadPortActive.UseVisualStyleBackColor = true;
@@ -670,9 +711,10 @@
             // chkCheckAll
             // 
             this.chkCheckAll.AutoSize = true;
-            this.chkCheckAll.Location = new System.Drawing.Point(9, 15);
+            this.chkCheckAll.Location = new System.Drawing.Point(7, 12);
+            this.chkCheckAll.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chkCheckAll.Name = "chkCheckAll";
-            this.chkCheckAll.Size = new System.Drawing.Size(45, 21);
+            this.chkCheckAll.Size = new System.Drawing.Size(37, 17);
             this.chkCheckAll.TabIndex = 18;
             this.chkCheckAll.Text = "All";
             this.chkCheckAll.UseVisualStyleBackColor = true;
@@ -682,10 +724,9 @@
             // 
             this.btnStopActive.Image = ((System.Drawing.Image)(resources.GetObject("btnStopActive.Image")));
             this.btnStopActive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnStopActive.Location = new System.Drawing.Point(463, 574);
-            this.btnStopActive.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStopActive.Location = new System.Drawing.Point(347, 466);
             this.btnStopActive.Name = "btnStopActive";
-            this.btnStopActive.Size = new System.Drawing.Size(85, 28);
+            this.btnStopActive.Size = new System.Drawing.Size(64, 23);
             this.btnStopActive.TabIndex = 17;
             this.btnStopActive.Text = "Stop";
             this.btnStopActive.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -696,10 +737,9 @@
             // 
             this.btnStartActive.Image = ((System.Drawing.Image)(resources.GetObject("btnStartActive.Image")));
             this.btnStartActive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnStartActive.Location = new System.Drawing.Point(362, 574);
-            this.btnStartActive.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStartActive.Location = new System.Drawing.Point(272, 466);
             this.btnStartActive.Name = "btnStartActive";
-            this.btnStartActive.Size = new System.Drawing.Size(86, 28);
+            this.btnStartActive.Size = new System.Drawing.Size(64, 23);
             this.btnStartActive.TabIndex = 16;
             this.btnStartActive.Text = "Start";
             this.btnStartActive.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -710,9 +750,11 @@
             // 
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.txtPassActive);
-            this.groupBox1.Location = new System.Drawing.Point(9, 495);
+            this.groupBox1.Location = new System.Drawing.Point(4, 393);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(904, 61);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(678, 50);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Transfer Money";
@@ -720,25 +762,28 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 31);
+            this.label5.Location = new System.Drawing.Point(8, 25);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(81, 17);
+            this.label5.Size = new System.Drawing.Size(62, 13);
             this.label5.TabIndex = 7;
             this.label5.Text = "Password : ";
             // 
             // txtPassActive
             // 
-            this.txtPassActive.Location = new System.Drawing.Point(98, 28);
+            this.txtPassActive.Location = new System.Drawing.Point(74, 23);
+            this.txtPassActive.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPassActive.Name = "txtPassActive";
-            this.txtPassActive.Size = new System.Drawing.Size(100, 22);
+            this.txtPassActive.Size = new System.Drawing.Size(76, 20);
             this.txtPassActive.TabIndex = 6;
             // 
             // lblTotalPortActive
             // 
             this.lblTotalPortActive.AutoSize = true;
-            this.lblTotalPortActive.Location = new System.Drawing.Point(890, 16);
+            this.lblTotalPortActive.Location = new System.Drawing.Point(668, 13);
+            this.lblTotalPortActive.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTotalPortActive.Name = "lblTotalPortActive";
-            this.lblTotalPortActive.Size = new System.Drawing.Size(16, 17);
+            this.lblTotalPortActive.Size = new System.Drawing.Size(13, 13);
             this.lblTotalPortActive.TabIndex = 14;
             this.lblTotalPortActive.Text = "0";
             // 
@@ -759,18 +804,24 @@
             this.GetSMS,
             this.ChangePass,
             this.InforActive});
-            this.dgvPortActive.Location = new System.Drawing.Point(6, 37);
-            this.dgvPortActive.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvPortActive.Location = new System.Drawing.Point(4, 30);
             this.dgvPortActive.Name = "dgvPortActive";
             this.dgvPortActive.RowHeadersVisible = false;
-            this.dgvPortActive.Size = new System.Drawing.Size(904, 406);
+            this.dgvPortActive.Size = new System.Drawing.Size(678, 330);
             this.dgvPortActive.TabIndex = 13;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(8, 568);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(690, 19);
+            this.progressBar1.TabIndex = 12;
             // 
             // Process
             // 
             this.Process.HeaderText = "";
             this.Process.Name = "Process";
-            this.Process.ReadOnly = true;
             this.Process.Width = 30;
             // 
             // dataGridViewTextBoxColumn2
@@ -805,14 +856,14 @@
             this.GetSMS.HeaderText = "Get Password";
             this.GetSMS.Name = "GetSMS";
             this.GetSMS.ReadOnly = true;
-            this.GetSMS.Width = 150;
+            this.GetSMS.Width = 120;
             // 
             // ChangePass
             // 
             this.ChangePass.HeaderText = "Change Password";
             this.ChangePass.Name = "ChangePass";
             this.ChangePass.ReadOnly = true;
-            this.ChangePass.Width = 150;
+            this.ChangePass.Width = 120;
             // 
             // InforActive
             // 
@@ -821,26 +872,18 @@
             this.InforActive.Name = "InforActive";
             this.InforActive.ReadOnly = true;
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(10, 699);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(920, 23);
-            this.progressBar1.TabIndex = 12;
-            // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(930, 722);
+            this.ClientSize = new System.Drawing.Size(698, 587);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.picLoading);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.Text = "Auto Transfer Money";
@@ -933,6 +976,7 @@
         private System.Windows.Forms.CheckBox chkCheckAll;
         private System.Windows.Forms.Button btnLoadPortActive;
         private System.Windows.Forms.Label lblStatusActive;
+        private System.Windows.Forms.Label lblRunningActive;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Process;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;

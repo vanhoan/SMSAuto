@@ -178,7 +178,6 @@ namespace SMSAuto.Common
             }
             return listdata;
         }
-
         public static string ReadFile(string file)
         {
             string data = "";
@@ -321,6 +320,22 @@ namespace SMSAuto.Common
                 return 0;
             }
             return 0;
+        }
+
+        public static string GetPassword(List<string> listMessages)
+        {
+            string pass = "";
+            foreach (string mess in listMessages)
+            {
+                if (!string.IsNullOrEmpty(mess) && mess.IndexOf("successfully activated") >= 0)
+                {
+                    Regex regex = new Regex(@"[0-9]{6}");
+                    Match match = regex.Match(mess);
+                    pass = match.Value.Trim();
+                    break;
+                }
+            }
+            return pass;
         }
         #endregion Reponse
 
