@@ -217,6 +217,8 @@ namespace SMSAuto.Action
                 if (i == 5)
                 {
                     Utils.WriteFileLog("Process active port " + port + " is failed" );
+                    serialPort.Close();
+                    serialPort.Dispose();
                     return false;
                 }
                 try
@@ -224,11 +226,15 @@ namespace SMSAuto.Action
                     ss += serialPort.ReadExisting();
                     if (ss.IndexOf("OK") >= 0 || ss.IndexOf("CUSD: 2") >= 0)
                     {
+                        serialPort.Close();
+                        serialPort.Dispose();
                         return true;
                     }
                     else if(ss.IndexOf("ERROR") >= 0)
                     {
                         Utils.WriteFileLog("Process active port " + port + " is failed " + ss);
+                        serialPort.Close();
+                        serialPort.Dispose();
                         return false;
                     }
                     else{
@@ -239,6 +245,8 @@ namespace SMSAuto.Action
                 catch (Exception e)
                 {
                     Utils.WriteFileLog("Process active port " + port + " is failed " + e.Message);
+                    serialPort.Close();
+                    serialPort.Dispose();
                     return false;
                 }
 
@@ -266,6 +274,8 @@ namespace SMSAuto.Action
                 if (i == 5)
                 {
                     Utils.WriteFileLog("Process change pass port " + port + " is failed");
+                    serialPort.Close();
+                    serialPort.Dispose();
                     return false;
                 }
                 try
@@ -273,11 +283,15 @@ namespace SMSAuto.Action
                     ss += serialPort.ReadExisting();
                     if (ss.IndexOf("OK") >= 0 || ss.IndexOf("CUSD: 2") >= 0)
                     {
+                        serialPort.Close();
+                        serialPort.Dispose();
                         return true;
                     }
                     else if (ss.IndexOf("ERROR") >= 0)
                     {
                         Utils.WriteFileLog("Process change pass port " + port + " is failed " + ss);
+                        serialPort.Close();
+                        serialPort.Dispose();
                         return false;
                     }
                     else
@@ -289,6 +303,8 @@ namespace SMSAuto.Action
                 catch (Exception e)
                 {
                     Utils.WriteFileLog("Process change pass port " + port + " is failed " + e.Message);
+                    serialPort.Close();
+                    serialPort.Dispose();
                     return false;
                 }
 
@@ -297,7 +313,6 @@ namespace SMSAuto.Action
             serialPort.Dispose();
             return true;
         }
-
         public List<string> GetListMessages(string port)
         {
             List<string> ListMessages = new List<string>();
@@ -309,52 +324,64 @@ namespace SMSAuto.Action
             serialPort.ReadTimeout = 3000;
             serialPort.WriteTimeout = 5000;
             serialPort.Open();
-
-            if (!SetFormatText(serialPort))
+            try
             {
-                Utils.WriteFileLog("Can't Use message format text mode");
-                return ListMessages;
-            }
-            if (!SetUseCharacter(serialPort))
-            {
-                Utils.WriteFileLog("Can't Use character set GSM");
-                return ListMessages;
-            }
-            if (!SetSelectSimStorage(serialPort))
-            {
-                Utils.WriteFileLog("Can't set select SIM storage");
-                return ListMessages;
-            }
-            string command = Constant.COMMAND_GET_LIST_MESSAGES;
-            serialPort.WriteLine(command);
-            int i = 0;
-            bool isReading = true;
-            while (isReading)
-            {
-                try
+                if (!SetFormatText(serialPort))
                 {
-                    string ss = serialPort.ReadLine();
-                    if (!string.IsNullOrEmpty(ss))
-                    {
-                        ListMessages.Add(ss);
-                    }
-                    if (ss.IndexOf("OK") >= 0 || ss.IndexOf("ERROR") >= 0)
-                    {
-                        isReading = false;
-                    }
-                    else
-                    {
-                        Thread.Sleep(1000);
-                        i++;
-                    }
+                    Utils.WriteFileLog("Can't Use message format text mode");
+                    serialPort.Close();
+                    serialPort.Dispose();
+                    return ListMessages;
                 }
-                catch (Exception)
+                if (!SetUseCharacter(serialPort))
                 {
-                    Thread.Sleep(1000);
-                    i++;
+                    Utils.WriteFileLog("Can't Use character set GSM");
+                    serialPort.Close();
+                    serialPort.Dispose();
+                    return ListMessages;
                 }
+                if (!SetSelectSimStorage(serialPort))
+                {
+                    Utils.WriteFileLog("Can't set select SIM storage");
+                    serialPort.Close();
+                    serialPort.Dispose();
+                    return ListMessages;
+                }
+                string command = Constant.COMMAND_GET_LIST_MESSAGES;
+                serialPort.WriteLine(command);
+                int i = 0;
+                bool isReading = true;
+                while (isReading)
+                {
+                    try
+                    {
+                        string ss = serialPort.ReadLine();
+                        if (!string.IsNullOrEmpty(ss))
+                        {
+                            ListMessages.Add(ss);
+                        }
+                        if (ss.IndexOf("OK") >= 0 || ss.IndexOf("ERROR") >= 0)
+                        {
+                            isReading = false;
+                        }
+                        else
+                        {
+                            Thread.Sleep(1000);
+                            i++;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        
+                    }
 
+                }
             }
+            catch (Exception e)
+            {
+                Utils.WriteFileLog(e.Message);
+            }
+            
             serialPort.Close();
             serialPort.Dispose();
             return ListMessages;
