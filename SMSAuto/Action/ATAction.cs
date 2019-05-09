@@ -95,9 +95,7 @@ namespace SMSAuto.Action
                     ss = e.Message;
                     break;
                 }
-
             }
-
             serialPort.Close();
             serialPort.Dispose();
             return ss;
@@ -163,7 +161,7 @@ namespace SMSAuto.Action
             serialPort.WriteTimeout = 5000;
             serialPort.Open();
             string command = string.Format(Constant.COMMAND_TRANSFER,phone , money, pass);
-            Utils.WriteFileLog(command);
+            
             serialPort.WriteLine(command);
             string ss = "";
             int i = 0;
@@ -195,7 +193,6 @@ namespace SMSAuto.Action
             }
             serialPort.Close();
             serialPort.Dispose();
-            Utils.WriteFileLog(ss);
             return ss;
         }
         public bool ActiveMoney(string port)
@@ -209,6 +206,7 @@ namespace SMSAuto.Action
             serialPort.Open();
             string command = Constant.COMMAND_ACTIVE;
             serialPort.WriteLine(command);
+            
             string ss = "";
             int i = 0;
             bool isReading = true;
@@ -216,7 +214,7 @@ namespace SMSAuto.Action
             {
                 if (i == 5)
                 {
-                    Utils.WriteFileLog("Process active port " + port + " is failed" );
+                    Utils.WriteFileLog("Process active port " + port + " is failed", port);
                     serialPort.Close();
                     serialPort.Dispose();
                     return false;
@@ -232,7 +230,7 @@ namespace SMSAuto.Action
                     }
                     else if(ss.IndexOf("ERROR") >= 0)
                     {
-                        Utils.WriteFileLog("Process active port " + port + " is failed " + ss);
+                        Utils.WriteFileLog("Process active port " + port + " is failed " + ss, port);
                         serialPort.Close();
                         serialPort.Dispose();
                         return false;
@@ -244,7 +242,7 @@ namespace SMSAuto.Action
                 }
                 catch (Exception e)
                 {
-                    Utils.WriteFileLog("Process active port " + port + " is failed " + e.Message);
+                    Utils.WriteFileLog("Process active port " + port + " is failed " + e.Message, port);
                     serialPort.Close();
                     serialPort.Dispose();
                     return false;
@@ -273,7 +271,7 @@ namespace SMSAuto.Action
             {
                 if (i == 5)
                 {
-                    Utils.WriteFileLog("Process change pass port " + port + " is failed");
+                    Utils.WriteFileLog("Process change pass port " + port + " is failed", port);
                     serialPort.Close();
                     serialPort.Dispose();
                     return false;
@@ -289,7 +287,7 @@ namespace SMSAuto.Action
                     }
                     else if (ss.IndexOf("ERROR") >= 0)
                     {
-                        Utils.WriteFileLog("Process change pass port " + port + " is failed " + ss);
+                        Utils.WriteFileLog("Process change pass port " + port + " is failed " + ss, port);
                         serialPort.Close();
                         serialPort.Dispose();
                         return false;
@@ -302,7 +300,7 @@ namespace SMSAuto.Action
                 }
                 catch (Exception e)
                 {
-                    Utils.WriteFileLog("Process change pass port " + port + " is failed " + e.Message);
+                    Utils.WriteFileLog("Process change pass port " + port + " is failed " + e.Message, port);
                     serialPort.Close();
                     serialPort.Dispose();
                     return false;
@@ -328,21 +326,21 @@ namespace SMSAuto.Action
             {
                 if (!SetFormatText(serialPort))
                 {
-                    Utils.WriteFileLog("Can't Use message format text mode");
+                    Utils.WriteFileLog("Can't Use message format text mode", port);
                     serialPort.Close();
                     serialPort.Dispose();
                     return ListMessages;
                 }
                 if (!SetUseCharacter(serialPort))
                 {
-                    Utils.WriteFileLog("Can't Use character set GSM");
+                    Utils.WriteFileLog("Can't Use character set GSM", port);
                     serialPort.Close();
                     serialPort.Dispose();
                     return ListMessages;
                 }
                 if (!SetSelectSimStorage(serialPort))
                 {
-                    Utils.WriteFileLog("Can't set select SIM storage");
+                    Utils.WriteFileLog("Can't set select SIM storage", port);
                     serialPort.Close();
                     serialPort.Dispose();
                     return ListMessages;
@@ -379,7 +377,7 @@ namespace SMSAuto.Action
             }
             catch (Exception e)
             {
-                Utils.WriteFileLog(e.Message);
+                Utils.WriteFileLog(e.Message, port);
             }
             
             serialPort.Close();

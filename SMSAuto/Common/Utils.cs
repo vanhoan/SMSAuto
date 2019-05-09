@@ -127,7 +127,7 @@ namespace SMSAuto.Common
                 csvFileWriter.Close();
             }
         }
-        public static void WriteFileLog(string data)
+        public static void WriteFileLog(string data, string perfix_name)
         {
             StreamWriter csvFileWriter = null;          
             try
@@ -138,7 +138,7 @@ namespace SMSAuto.Common
                 {
                     Directory.CreateDirectory(Constant.PATH_LOG);
                 }
-                string file = string.Format(Constant.PATH_FILE_LOG, datestr);
+                string file = string.Format(Constant.PATH_FILE_LOG, datestr+"_"+ perfix_name);
                 csvFileWriter = new StreamWriter(file, true, Encoding.UTF8);
                 csvFileWriter.WriteLine(data);
                 csvFileWriter.Flush();

@@ -559,7 +559,7 @@ namespace SMSAuto
                     }
                     catch (Exception e1)
                     {
-                        Utils.WriteFileLog(e1.Message);
+                        Utils.WriteFileLog(e1.Message, item);
                     }
                     finally
                     {
@@ -750,7 +750,6 @@ namespace SMSAuto
         {
             try
             {
-                //string command = string.Format(Constant.COMMAND_TRANSFER, port.Phone_Reveice, Math.Floor(port.Money - 1), PASSWORD);
                 ChangeUI(() => lblRunning.Text = "Running : "+ port.Name);
                 ATAction action = new ATAction();
                 double money = Math.Floor(port.Money - 1);
@@ -758,15 +757,21 @@ namespace SMSAuto
                 {
                     money = Constant.MONEY_LIMIT;
                 }
+                Utils.WriteFileLog("Transfer money form " + port.Name + " to " + port.Phone_Reveice, port.Name);
                 string reponse = action.TransferMoney(port.Name, port.Phone_Reveice, money, PASSWORD);
                 if (reponse.IndexOf("successfully") >=0)
                 {
+                    Utils.WriteFileLog("Transfer money success", port.Name);
                     listPortProcessSuccess.Add(port);
                 }
+                else
+                {
+                    Utils.WriteFileLog("Transfer money error "+ reponse, port.Name);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Utils.WriteFileLog("Transfer money error " + e.Message, port.Name);
             }
             i++;
             return i;
@@ -787,8 +792,7 @@ namespace SMSAuto
                     {
                         break;
                     }
-                    worker.ReportProgress(ProcessAction(listPortProcess[i]));
-                    
+                    worker.ReportProgress(ProcessAction(listPortProcess[i]));                 
                 }
             }
         }
@@ -870,7 +874,8 @@ namespace SMSAuto
             ChangeUI(() => btnStartActive.Enabled = false);
             ChangeUI(() => btnStopActive.Enabled = true);
             FLAG_PROCESS = true;
-            backgWorkerActive.RunWorkerAsync();
+            ProcessActiveMutiThread();
+            //backgWorkerActive.RunWorkerAsync();
         }
 
         private void btnStopActive_Click(object sender, EventArgs e)
@@ -918,7 +923,7 @@ namespace SMSAuto
             { 
                 ChangeUI(() => lblRunningActive.Text = "Running : " + port.Name);
                 ATAction action = new ATAction();
-
+                Utils.WriteFileLog("Active phone " + port.Phone, port.Name);
                 if (!action.ActiveMoney(port.Name))
                 {
                     ChangeSatusActive(4,"Error", port.Name);
@@ -926,45 +931,132 @@ namespace SMSAuto
                     return i;
                 }
                 ChangeSatusActive(4, "OK", port.Name);
-
-
                 int loop = 0;
+                Utils.WriteFileLog("Get pass from list messages : " + port.Phone, port.Name);
                 List<string> ListMessages = action.GetListMessages(port.Name);
                 string pass = Utils.GetPassword(ListMessages); ;
                 while (string.IsNullOrEmpty(pass))
                 {
                     if(loop == LOOP)
                     {
+                        Utils.WriteFileLog("Can't pass from list messages : " + port.Phone, port.Name);
+                        foreach (string str in ListMessages)
+                        {
+                            Utils.WriteFileLog(str, port.Name);
+                        }
                         ChangeSatusActive(5, "No Password", port.Name);
                         i++;
                         return i;
                     }
                     ListMessages = action.GetListMessages(port.Name);
-                    pass = Utils.GetPassword(ListMessages);
-                    
+                    pass = Utils.GetPassword(ListMessages);                   
                     Thread.Sleep(1000);
                     loop++;
                 }
 
                 ChangeSatusActive(5, pass, port.Name);
-
+                Utils.WriteFileLog("Change password phone : " + port.Phone, port.Name);
                 if (action.ChangePassword(port.Name, pass, PASSWORD))
                 {
                     ChangeSatusActive(6, "OK", port.Name);
                 }
                 else
                 {
-                    string data = "Phone : "+ port.Phone + " - Port : "+port.Name+" - Pass :"+pass;
-                    Utils.WriteFile(data, Constant.PATH_FILE_CHANGE_ERROR);
+                    string data = "Change password error : " + port.Phone + " - Port : "+port.Name+" - Pass :"+pass;
+                    Utils.WriteFileLog(data, port.Name);
                     ChangeSatusActive(6, "ERROR", port.Name);
                 }
             }
             catch (Exception e)
             {
-                Utils.WriteFileLog(e.Message);
+                Utils.WriteFileLog(e.Message, port.Name);
             }
             i++;
             return i;
+        }
+        private void ProcessActiveMuti(ComPort port)
+        {
+            try
+            {
+                ATAction action = new ATAction();
+                Utils.WriteFileLog("Active phone " + port.Phone, port.Name);
+                if (!action.ActiveMoney(port.Name))
+                {
+                    ChangeSatusActive(4, "Error", port.Name);
+                    return;
+                }
+                ChangeSatusActive(4, "OK", port.Name);
+                int loop = 0;
+                Utils.WriteFileLog("Get pass from list messages : " + port.Phone, port.Name);
+                List<string> ListMessages = action.GetListMessages(port.Name);
+                string pass = Utils.GetPassword(ListMessages); ;
+                while (string.IsNullOrEmpty(pass))
+                {
+                    if (loop == LOOP)
+                    {
+                        Utils.WriteFileLog("Can't pass from list messages : " + port.Phone, port.Name);
+                        foreach (string str in ListMessages)
+                        {
+                            Utils.WriteFileLog(str, port.Name);
+                        }
+                        ChangeSatusActive(5, "No Password", port.Name);
+                        return;
+                    }
+                    ListMessages = action.GetListMessages(port.Name);
+                    pass = Utils.GetPassword(ListMessages);
+                    Thread.Sleep(1000);
+                    loop++;
+                }
+
+                ChangeSatusActive(5, pass, port.Name);
+                Utils.WriteFileLog("Change password phone : " + port.Phone, port.Name);
+                if (action.ChangePassword(port.Name, pass, PASSWORD))
+                {
+                    ChangeSatusActive(6, "OK", port.Name);
+                }
+                else
+                {
+                    string data = "Change password error : " + port.Phone + " - Port : " + port.Name + " - Pass :" + pass;
+                    Utils.WriteFileLog(data, port.Name);
+                    ChangeSatusActive(6, "ERROR", port.Name);
+                }
+            }
+            catch (Exception e)
+            {
+                Utils.WriteFileLog(e.Message, port.Name);
+            }
+        }
+        private void ProcessActiveMutiThread()
+        {
+            int index = 0;
+            foreach (ComPort port in listPortActiveProcess)
+            {
+                Thread t = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        if (FLAG_PROCESS)
+                        {
+                            ProcessActiveMuti(port);
+                        }
+                    }
+                    catch (Exception e1)
+                    {
+                        Utils.WriteFileLog(e1.Message, port.Name);
+                    }
+                    finally
+                    {
+                        index++;
+                        if (index == listPortActiveProcess.Count - 1)
+                        {
+                            ChangeUI(() => btnStartActive.Enabled = true);
+                            ChangeUI(() => btnStopActive.Enabled = false);
+                        }
+                    }
+                });
+                t.Start();   
+            }
         }
         private void ChangeSatusActive(int indexcell, string error, string port)
         {
