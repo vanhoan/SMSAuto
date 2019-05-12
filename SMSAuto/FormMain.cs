@@ -34,6 +34,7 @@ namespace SMSAuto
         private int count = 0;
         private bool FLAG_PROCESS = true;
         private string PASSWORD = "";
+        private string PASSWORD_ACTIVE = "";
         private int LOOP = 3;
         private bool FLAG_ADDPORT = true;
         private BackgroundWorker backgWorker = new BackgroundWorker();
@@ -258,20 +259,25 @@ namespace SMSAuto
             ComPort c = new ComPort();
             c.Name = port;
             ATAction action = new ATAction();
+            Utils.WriteFileLog("Check banalce " + port, port);
             string reponse = action.CheckBanlce(port);
             c.Status = Utils.GetStatus(reponse);
+            Utils.WriteFileLog("Check banalce status : " + c.Status, port);
             int loop = 0;
             while (!c.Status.Equals(Constant.STATUS_OK))
             {
                 if (loop == LOOP || !Constant.FLAG_PROCESS_LOADPORT)
                 {
+                    Utils.WriteFileLog("Check banalce status : " + c.Status, port);
                     return c;
                 }
                 reponse = action.CheckBanlce(port);
+                Utils.WriteFileLog("Check banalce " + port, port);
                 c.Status = Utils.GetStatus(reponse);
+                Utils.WriteFileLog("Check banalce status : " + c.Status, port);
                 loop++;
             }
-
+            Utils.WriteFileLog("Get phone number ", port);
             c.Phone = Utils.GetPhone(reponse);
             if (c.Status.Equals(Constant.STATUS_OK) && string.IsNullOrEmpty(c.Phone))
             {
@@ -860,7 +866,7 @@ namespace SMSAuto
                 MessageBox.Show("Please input password");
                 return;
             }
-            PASSWORD = txtPassActive.Text;
+            PASSWORD_ACTIVE = txtPassActive.Text;
             GetListPortProcess();
             if(listPortActiveProcess.Count == 0)
             {
@@ -956,7 +962,7 @@ namespace SMSAuto
 
                 ChangeSatusActive(5, pass, port.Name);
                 Utils.WriteFileLog("Change password phone : " + port.Phone, port.Name);
-                if (action.ChangePassword(port.Name, pass, PASSWORD))
+                if (action.ChangePassword(port.Name, pass, PASSWORD_ACTIVE))
                 {
                     ChangeSatusActive(6, "OK", port.Name);
                 }
@@ -1010,7 +1016,7 @@ namespace SMSAuto
 
                 ChangeSatusActive(5, pass, port.Name);
                 Utils.WriteFileLog("Change password phone : " + port.Phone, port.Name);
-                if (action.ChangePassword(port.Name, pass, PASSWORD))
+                if (action.ChangePassword(port.Name, pass, PASSWORD_ACTIVE))
                 {
                     ChangeSatusActive(6, "OK", port.Name);
                 }

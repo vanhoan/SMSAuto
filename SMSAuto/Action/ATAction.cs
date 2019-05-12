@@ -206,7 +206,7 @@ namespace SMSAuto.Action
             serialPort.Open();
             string command = Constant.COMMAND_ACTIVE;
             serialPort.WriteLine(command);
-            
+            Utils.WriteFileLog(command, port);
             string ss = "";
             int i = 0;
             bool isReading = true;
@@ -264,6 +264,7 @@ namespace SMSAuto.Action
             serialPort.Open();
             string command = string.Format(Constant.COMMAND_CHNAGE_PASS,pass,newpass);
             serialPort.WriteLine(command);
+            Utils.WriteFileLog(command, port);
             string ss = "";
             int i = 0;
             bool isReading = true;
@@ -347,6 +348,7 @@ namespace SMSAuto.Action
                 }
                 string command = Constant.COMMAND_GET_LIST_MESSAGES;
                 serialPort.WriteLine(command);
+                Utils.WriteFileLog(command, port);
                 int i = 0;
                 bool isReading = true;
                 while (isReading)
@@ -454,6 +456,7 @@ namespace SMSAuto.Action
         {
             string command = Constant.COMMAND_SET_SELECT_SIM_STORAGE;
             serialPort.WriteLine(command);
+            
             string ss = "";
             int i = 0;
             bool isReading = true;

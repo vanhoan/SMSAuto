@@ -238,9 +238,9 @@ namespace SMSAuto.Common
           
             //reponse = reponse.Replace("OK","");
             //reponse = reponse.Replace("+", "");
-            //reponse = reponse.Replace("ATCUSD=1,\"*101#\",15\r", "");
-            //reponse = reponse.Replace("AT+CUSD=1,\"*101#\",15\r", "");
-            //reponse = reponse.Replace("CUSD: 2", "");
+            reponse = reponse.Replace("ATCUSD=1,\"*101#\",15\r", "");
+            reponse = reponse.Replace("AT+CUSD=1,\"*101#\",15\r", "");
+            reponse = reponse.Replace("CUSD: 2", "");
             return reponse;
            
         }
