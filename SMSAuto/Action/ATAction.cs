@@ -160,8 +160,7 @@ namespace SMSAuto.Action
             serialPort.ReadTimeout = 3000;
             serialPort.WriteTimeout = 5000;
             serialPort.Open();
-            string command = string.Format(Constant.COMMAND_TRANSFER,phone , money, pass);
-            
+            string command = string.Format(Constant.COMMAND_TRANSFER,phone , money, pass);        
             serialPort.WriteLine(command);
             string ss = "";
             int i = 0;
@@ -204,11 +203,17 @@ namespace SMSAuto.Action
             serialPort.ReadTimeout = 3000;
             serialPort.WriteTimeout = 5000;
             serialPort.Open();
+            if (!SetSelectSimStorage(serialPort))
+            {
+                Utils.WriteFileLog("Can't set select SIM storage", port);
+            }
+
             string command = Constant.COMMAND_ACTIVE;
             serialPort.WriteLine(command);
             Utils.WriteFileLog(command, port);
             string ss = "";
             int i = 0;
+
             bool isReading = true;
             while (isReading)
             {
@@ -253,6 +258,71 @@ namespace SMSAuto.Action
             serialPort.Dispose();
             return true;
         }
+
+        public bool DeactiveMoney(string port)
+        {
+            SerialPort serialPort = new SerialPort(port, 115200);
+            serialPort.Parity = Parity.None;
+            serialPort.DataBits = 8;
+            serialPort.StopBits = StopBits.One;
+            serialPort.ReadTimeout = 3000;
+            serialPort.WriteTimeout = 5000;
+            serialPort.Open();
+            if (!SetSelectSimStorage(serialPort))
+            {
+                Utils.WriteFileLog("Can't set select SIM storage", port);
+            }
+            string command = Constant.COMMAND_DEACTIVE;
+            serialPort.WriteLine(command);
+            Utils.WriteFileLog(command, port);
+            string ss = "";
+            int i = 0;
+            bool isReading = true;
+            while (isReading)
+            {
+                if (i == 5)
+                {
+                    Utils.WriteFileLog("Process deactive port " + port + " is failed", port);
+                    serialPort.Close();
+                    serialPort.Dispose();
+                    return false;
+                }
+                try
+                {
+                    ss += serialPort.ReadExisting();
+                    if (ss.IndexOf("OK") >= 0 || ss.IndexOf("CUSD: 2") >= 0)
+                    {
+                        serialPort.Close();
+                        serialPort.Dispose();
+                        return true;
+                    }
+                    else if (ss.IndexOf("ERROR") >= 0)
+                    {
+                        Utils.WriteFileLog("Process deactive port " + port + " is failed " + ss, port);
+                        serialPort.Close();
+                        serialPort.Dispose();
+                        return false;
+                    }
+                    else
+                    {
+                        Thread.Sleep(2000);
+                        i++;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Utils.WriteFileLog("Process deactive port " + port + " is failed " + e.Message, port);
+                    serialPort.Close();
+                    serialPort.Dispose();
+                    return false;
+                }
+
+            }
+            serialPort.Close();
+            serialPort.Dispose();
+            return true;
+        }
+
         public bool ChangePassword(string port, string pass, string newpass)
         {
             SerialPort serialPort = new SerialPort(port, 115200);

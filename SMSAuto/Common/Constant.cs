@@ -32,6 +32,7 @@ namespace SMSAuto.Common
         public static string COMMAND_PHONE = "AT+CNUM\r";
         public static string COMMAND_TRANSFER = "AT+CUSD=1,\"*100*{0}*{1}*{2}#\",15\r";
         public static string COMMAND_ACTIVE = "AT+CUSD=1,\"*000*1#\",15\r";
+        public static string COMMAND_DEACTIVE = "AT+CUSD=1,\"*000*2#\",15\r";
         //Use message format "Text mode"
         public static string COMMAND_SET_MESSAGES_FORMAT_TEXT = "AT+CMGF=1\r";
         //Use character set GSM

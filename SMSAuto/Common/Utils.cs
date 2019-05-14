@@ -240,6 +240,8 @@ namespace SMSAuto.Common
             //reponse = reponse.Replace("+", "");
             reponse = reponse.Replace("ATCUSD=1,\"*101#\",15\r", "");
             reponse = reponse.Replace("AT+CUSD=1,\"*101#\",15\r", "");
+            reponse = reponse.Replace("\r", "");
+            reponse = reponse.Replace("\n", "");
             reponse = reponse.Replace("CUSD: 2", "");
             return reponse;
            

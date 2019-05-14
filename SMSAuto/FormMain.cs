@@ -274,7 +274,6 @@ namespace SMSAuto
                 reponse = action.CheckBanlce(port);
                 Utils.WriteFileLog("Check banalce " + port, port);
                 c.Status = Utils.GetStatus(reponse);
-                Utils.WriteFileLog("Check banalce status : " + c.Status, port);
                 loop++;
             }
             Utils.WriteFileLog("Get phone number ", port);
@@ -471,6 +470,26 @@ namespace SMSAuto
 
             }           
         }
+
+        private void ChangeStatusDataGridView(ComPort port, string status)
+        {
+            try
+            {
+                foreach (DataGridViewRow row in dgvSend.Rows)
+                {
+                    if (port.Name.Equals(row.Cells[1].Value.ToString()))
+                    {
+                        row.Cells[4].Value = status;
+                        return;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         private void ReloadStatusDataGridView(DataGridView dgv, int rowindex)
         {
             try
@@ -584,7 +603,6 @@ namespace SMSAuto
                 t.Start();
             }
         }
-
         private void btnAddSend_Click(object sender, EventArgs e)
         {
             if(cbPortSend.SelectedItem == null)
@@ -660,6 +678,7 @@ namespace SMSAuto
             PASSWORD = txtPassword.Text;
             LoadListPortProcess();
             FLAG_PROCESS = true;
+            listPortProcessSuccess = new List<ComPort>();
             i = 0;
             count = listPortProcess.Count;
             progressBar1.Maximum = count;
@@ -667,9 +686,83 @@ namespace SMSAuto
 
             ChangeUI(() => btnStart.Enabled = false);
             ChangeUI(() => btnStop.Enabled = true);
-            backgWorker.RunWorkerAsync();
+            ProcessTransfMutiThread();
+            //backgWorker.RunWorkerAsync();
         }
 
+        private void ProcessTransfMutiThread()
+        {
+            foreach (ComPort port in listPortProcess)
+            {
+                Thread t = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        if (FLAG_PROCESS)
+                        {
+                            ProcessTransfMuti(port);
+                        }
+                    }
+                    catch (Exception e1)
+                    {
+                        Utils.WriteFileLog(e1.Message, port.Name);
+                    }
+                    finally
+                    {
+                        i++;
+                        if (i == listPortProcess.Count - 1)
+                        {
+                            ChangeUI(() => btnStart.Enabled = true);
+                            ChangeUI(() => btnStop.Enabled = false);
+                        }                     
+                        ChangeUI(() => progressBar1.Value = i);
+                        
+                    }
+                });
+                t.Start();
+            }
+        }
+        private void ProcessTransfMuti(ComPort port)
+        {
+            try
+            {
+                ChangeUI(() => lblRunning.Text = "Running : " + port.Name);
+                ATAction action = new ATAction();
+                double money = Math.Floor(port.Money - 1);
+                if (money > Constant.MONEY_LIMIT)
+                {
+                    money = Constant.MONEY_LIMIT;
+                }
+                Utils.WriteFileLog("Transfer money form " + port.Name + " to " + port.Phone_Reveice, port.Name);
+                string reponse = action.TransferMoney(port.Name, port.Phone_Reveice, money, PASSWORD);
+                if (reponse.IndexOf("successfully") >= 0)
+                {
+                    Utils.WriteFileLog("Transfer money success : "+ reponse, port.Name);                   
+                    listPortProcessSuccess.Add(port);
+                    ChangeUI(() => ChangeStatusDataGridView(port,"OK"));
+                }
+                else if(reponse.IndexOf("maximum")>=0)
+                {
+                    ChangeUI(() => ChangeStatusDataGridView(port, "Daily maximum"));
+                    Utils.WriteFileLog("Transfer money error daily maximum" + reponse, port.Name);
+                }
+                else if (reponse.IndexOf("wrong") >= 0)
+                {
+                    ChangeUI(() => ChangeStatusDataGridView(port, "Wrong password"));
+                    Utils.WriteFileLog("Transfer money error wrong password" + reponse, port.Name);
+                }
+                else
+                {
+                    ChangeUI(() => ChangeStatusDataGridView(port, "Error"));
+                    Utils.WriteFileLog("Transfer money error :" + reponse, port.Name);
+                }
+            }
+            catch (Exception e)
+            {
+                Utils.WriteFileLog("Transfer money error " + e.Message, port.Name);
+            }
+        }
         private void LoadListPortProcess()
         {
             listPortProcess = new List<ComPort>();
@@ -708,26 +801,26 @@ namespace SMSAuto
         private void btnStop_Click(object sender, EventArgs e)
         {
             FLAG_PROCESS = false;
-            if (backgWorker.WorkerSupportsCancellation == true)
-            {
-                backgWorker.CancelAsync();
-                backgWorker.Dispose();
+            //if (backgWorker.WorkerSupportsCancellation == true)
+            //{
+            //    backgWorker.CancelAsync();
+            //    backgWorker.Dispose();
 
-                while (backgWorker.IsBusy)
-                {
-                    Application.DoEvents();
-                    backgWorker = new BackgroundWorker();
-                    backgWorker.WorkerReportsProgress = true;
-                    backgWorker.WorkerSupportsCancellation = true;
-                    backgWorker.DoWork += new DoWorkEventHandler(backgWorker_DoWork);
-                    backgWorker.ProgressChanged += new ProgressChangedEventHandler(backgWorker_ProgressChanged);
-                    backgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgWorker_RunWorkerCompleted);
-                }
-                i = 0;
-                count = 0;
-                ChangeUI(() => btnStart.Enabled = true);
-                ChangeUI(() => btnStop.Enabled = false);
-            }
+            //    while (backgWorker.IsBusy)
+            //    {
+            //        Application.DoEvents();
+            //        backgWorker = new BackgroundWorker();
+            //        backgWorker.WorkerReportsProgress = true;
+            //        backgWorker.WorkerSupportsCancellation = true;
+            //        backgWorker.DoWork += new DoWorkEventHandler(backgWorker_DoWork);
+            //        backgWorker.ProgressChanged += new ProgressChangedEventHandler(backgWorker_ProgressChanged);
+            //        backgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgWorker_RunWorkerCompleted);
+            //    }
+            //    i = 0;
+            //    count = 0;
+            //    ChangeUI(() => btnStart.Enabled = true);
+            //    ChangeUI(() => btnStop.Enabled = false);
+            //}
         }
         private void rbNone_CheckedChanged(object sender, EventArgs e)
         {
@@ -876,14 +969,13 @@ namespace SMSAuto
             i = 0;
             count = listPortActiveProcess.Count;
             progressBar1.Maximum = count;
-            progressBar1.Value = 0;
+            progressBar1.Value = i;
             ChangeUI(() => btnStartActive.Enabled = false);
             ChangeUI(() => btnStopActive.Enabled = true);
             FLAG_PROCESS = true;
             ProcessActiveMutiThread();
             //backgWorkerActive.RunWorkerAsync();
         }
-
         private void btnStopActive_Click(object sender, EventArgs e)
         {
             FLAG_PROCESS = false;
@@ -927,7 +1019,7 @@ namespace SMSAuto
         {
             try
             { 
-                ChangeUI(() => lblRunningActive.Text = "Running : " + port.Name);
+                //ChangeUI(() => lblRunningActive.Text = "Running : " + port.Name);
                 ATAction action = new ATAction();
                 Utils.WriteFileLog("Active phone " + port.Phone, port.Name);
                 if (!action.ActiveMoney(port.Name))
@@ -1033,8 +1125,7 @@ namespace SMSAuto
             }
         }
         private void ProcessActiveMutiThread()
-        {
-            int index = 0;
+        {         
             foreach (ComPort port in listPortActiveProcess)
             {
                 Thread t = new Thread(
@@ -1053,17 +1144,19 @@ namespace SMSAuto
                     }
                     finally
                     {
-                        index++;
-                        if (index == listPortActiveProcess.Count - 1)
+                        i++;
+                        if (i == listPortActiveProcess.Count - 1)
                         {
                             ChangeUI(() => btnStartActive.Enabled = true);
                             ChangeUI(() => btnStopActive.Enabled = false);
                         }
+                        ChangeUI(() => progressBar1.Value = i);
                     }
                 });
                 t.Start();   
             }
         }
+       
         private void ChangeSatusActive(int indexcell, string error, string port)
         {
             try
@@ -1122,7 +1215,6 @@ namespace SMSAuto
                 {
                     ChangeUI(() => btnStartActive.Enabled = true);
                     ChangeUI(() => btnStopActive.Enabled = false);
-                    ChangeUI(() => lblRunningActive.Text = "Done");
                 }
             }
         }
@@ -1142,5 +1234,80 @@ namespace SMSAuto
         }
 
         #endregion Active
+        #region DeActive
+
+        private void ProcessDeActiveMuti(ComPort port)
+        {
+            try
+            {
+                ATAction action = new ATAction();
+                Utils.WriteFileLog("Deactive phone " + port.Phone, port.Name);
+                if (!action.DeactiveMoney(port.Name))
+                {
+                    ChangeSatusActive(4, "Error", port.Name);
+                    return;
+                }
+                ChangeSatusActive(4, "OK", port.Name);
+            }
+            catch (Exception e)
+            {
+                ChangeSatusActive(4, "Error", port.Name);
+                Utils.WriteFileLog(e.Message, port.Name);
+            }
+        }
+        private void ProcessDeActiveMutiThread()
+        {
+            foreach (ComPort port in listPortActiveProcess)
+            {
+                Thread t = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        if (FLAG_PROCESS)
+                        {
+                            ProcessDeActiveMuti(port);
+                        }
+                    }
+                    catch (Exception e1)
+                    {
+                        Utils.WriteFileLog(e1.Message, port.Name);
+                    }
+                    finally
+                    {
+                        i++;
+                        if (i == listPortActiveProcess.Count - 1)
+                        {
+                            ChangeUI(() => btnStartActive.Enabled = true);
+                            ChangeUI(() => btnStopActive.Enabled = true);
+                            ChangeUI(() => btnDeactive.Enabled = true);
+                        }
+                        ChangeUI(() => progressBar1.Value = i);
+                    }
+                });
+                t.Start();
+            }
+        }
+
+        private void btnDeactive_Click(object sender, EventArgs e)
+        {
+            GetListPortProcess();
+            if (listPortActiveProcess.Count == 0)
+            {
+                MessageBox.Show("Please choose port to deactive");
+                return;
+            }
+            i = 0;
+            count = listPortActiveProcess.Count;
+            progressBar1.Maximum = count;
+            progressBar1.Value = i;
+            ChangeUI(() => btnStartActive.Enabled = false);
+            ChangeUI(() => btnStopActive.Enabled = false);
+            ChangeUI(() => btnDeactive.Enabled = false);
+            ProcessDeActiveMutiThread();
+        }
+
+        #endregion
+
     }
 }
